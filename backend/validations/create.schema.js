@@ -4,7 +4,7 @@ export const CreateBook = z.object({
   name: z.string().min(2, "Book name must be at least 2 chars"),
   length: z.int32().positive({message: "Length must be greater than 0"}),
   author: z.string().min(2, "Author name must be at least 2 chars"),
-  category: z.int32().positive({message: "Select a category"})
+  category: z.int32().positive({message: "Select category"})
 });
 
 export const CreateCategory = z.object({
@@ -15,4 +15,10 @@ export const CreateCategory = z.object({
 export const CreateStatus = z.object({
     id: z.int32().positive(),
     description: z.string().min(2, "Description must be at least 2 chars")
+})
+
+export const Shelves = z.object({
+    status: z.int32().positive({message: "Select status"}),
+    progress: z.int32().positive(),
+    bookID: z.string().min(1, "Select Book")
 })
