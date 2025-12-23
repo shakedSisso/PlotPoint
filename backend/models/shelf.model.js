@@ -11,7 +11,7 @@ const shelfSchema = new mongoose.Schema({
         required: true,
     },
     progress: {
-        type: Number,
+        type: Int32,
         required: true,
     },
     userId: {
