@@ -22,3 +22,9 @@ export const Shelves = z.object({
     progress: z.int32().positive(),
     bookID: z.string().min(1, "Select Book")
 })
+
+export const Reviews = z.object({
+    bookID: z.string().min(1, "Select Book"),
+    rating: z.int32().positive(),
+    text: z.string().min(2, "enter reviews")
+})
