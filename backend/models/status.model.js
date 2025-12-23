@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const statusSchema = new mongoose.Schema({
     id:{
-        type: String,
+        type: Int32,
         required: true,
         unique: true
     },
