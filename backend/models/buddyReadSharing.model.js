@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const buddyReadSharing = new mongoose.Schema({
     buddyReadId: {
-        type: String,
+        type: ObjectId,
         required: true
     },
     userIdShared: {

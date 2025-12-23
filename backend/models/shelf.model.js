@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const shelfSchema = new mongoose.Schema({
     status: {
-        type: String,
+        type: Int32,
         required: true,
     },
     progress: {
@@ -10,11 +10,11 @@ const shelfSchema = new mongoose.Schema({
         required: true,
     },
     userId: {
-        type: String,
+        type: ObjectId,
         required: true,
     },
     bookId: {
-        type: String,
+        type: ObjectId,
         required: true,
     },
 });

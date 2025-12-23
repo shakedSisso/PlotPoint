@@ -2,11 +2,11 @@ import mongoose from "mongoose";
 
 const logSchema = new mongoose.Schema({
     userId: {
-        type: String,
+        type: ObjectId,
         required: true,
     },
     bookId: {
-        type: String,
+        type: ObjectId,
         required: true,
     },
     currentPage: {
