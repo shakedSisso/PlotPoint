@@ -28,3 +28,7 @@ export const Reviews = z.object({
     rating: z.int32().positive(),
     text: z.string().min(2, "enter reviews")
 })
+
+export const BuddyReadSharing = z.object({
+    userIdShared: z.string().min(1, "Select user")
+})
