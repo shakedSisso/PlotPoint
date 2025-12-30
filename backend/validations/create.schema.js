@@ -17,18 +17,22 @@ export const CreateStatus = z.object({
     description: z.string().min(2, "Description must be at least 2 chars")
 })
 
-export const Shelves = z.object({
+export const CreateShelves = z.object({
     status: z.int32().positive({message: "Select status"}),
     progress: z.int32().positive(),
     bookID: z.string().min(1, "Select Book")
 })
 
-export const Reviews = z.object({
+export const CreateReviews = z.object({
     bookID: z.string().min(1, "Select Book"),
     rating: z.int32().positive(),
     text: z.string().min(2, "enter reviews")
 })
 
-export const BuddyReadSharing = z.object({
+export const CreateBuddyReadSharing = z.object({
     userIdShared: z.string().min(1, "Select user")
+})
+
+export const CreateBuddyRead = z.object({
+    shelfId: z.string().min(1, "Select shelf")
 })
