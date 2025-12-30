@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const shelfSchema = new mongoose.Schema({
     name: {
-        tyoe: String,
+        type: String,
         required: true,
     },
     status: {
