@@ -2,7 +2,8 @@ import mongoose from "mongoose";
 
 const buddyReadSharing = new mongoose.Schema({
     buddyReadId: {
-        type: ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "BuddyRead",
         required: true
     },
     userIdShared: {
