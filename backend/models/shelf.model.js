@@ -14,12 +14,12 @@ const shelfSchema = new mongoose.Schema({
         required: true,
     },
     userId: {
-        type: ObjectId,
-        required: true,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User"
     },
     bookId: {
-        type: ObjectId,
-        required: true,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Book"
     },
 });
 

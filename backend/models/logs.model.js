@@ -2,12 +2,12 @@ import mongoose from "mongoose";
 
 const logSchema = new mongoose.Schema({
     userId: {
-        type: ObjectId,
-        required: true,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
     },
     bookId: {
-        type: ObjectId,
-        required: true,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Book",
     },
     currentPage: {
         type: Number,
