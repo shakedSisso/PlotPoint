@@ -6,7 +6,7 @@ const bookSchema = new mongoose.Schema({
         required: true,
     },
     length: {
-        type: Int32,
+        type: Number,
         required: true,
     },
     author: {
@@ -14,8 +14,9 @@ const bookSchema = new mongoose.Schema({
         required: true,
     },
     category: {
-        type: String,
-        required: true,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Category",
+        // required: true,
     },
     isUserAdded: {
         type: Boolean,

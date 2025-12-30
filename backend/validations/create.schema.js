@@ -1,14 +1,15 @@
 import * as z from "zod";
 
 export const CreateBook = z.object({
-  name: z.string().min(2, "Book name must be at least 2 chars"),
-  length: z.int32().positive({message: "Length must be greater than 0"}),
-  author: z.string().min(2, "Author name must be at least 2 chars"),
-  category: z.int32().positive({message: "Select category"})
+    name: z.string().min(2, "Book name must be at least 2 chars"),
+    length: z.coerce.number().positive({ message: "Length must be greater than 0" }),
+    author: z.string().min(2, "Author name must be at least 2 chars"),
+    categoryName: z.string().min(2, "Category name must be at least 2 chars"),
+    isPrivate: z.boolean(),
+    isUserAdded: z.boolean()
 });
 
 export const CreateCategory = z.object({
-    id: z.int32().positive(),
     name: z.string().min(2, "Category name must be at least 2 chars")
 })
 
@@ -18,7 +19,7 @@ export const CreateStatus = z.object({
 })
 
 export const CreateShelves = z.object({
-    status: z.int32().positive({message: "Select status"}),
+    status: z.int32().positive({ message: "Select status" }),
     progress: z.int32().positive(),
     bookID: z.string().min(1, "Select Book")
 })
@@ -40,5 +41,5 @@ export const CreateBuddyRead = z.object({
 export const CreateLogs = z.object({
     bookID: z.string().min(1, "Select book"),
     currentPage: z.int32().positive(),
-    note:z.string().min(1, "Enter log")
+    note: z.string().min(1, "Enter log")
 })
