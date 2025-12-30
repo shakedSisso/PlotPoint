@@ -1,9 +1,10 @@
 import { success } from "zod";
 import { Book } from "../models/book.model.js";
 import { Category } from "../models/category.model.js";
+import { CreateBook } from "../validations/create.schema.js";
 
-import { CreateBook, CreateCategory } from "../validations/create.schema.js";
-
+//creation of book, if Cateogry exists it refers to the _id of the category in mogodb, but if not it creat a new category.
+//the book refers to the id of the category
 export async function bookCreation(req, res) {
     try {
         const data = CreateBook.parse(req.body);
@@ -13,8 +14,8 @@ export async function bookCreation(req, res) {
             return res.status(409).json({ success: false, error: "This book already exists" });
 
 
-        const categoryName = data.categoryName.trim();
-        let categoryDoc = await Category.findOne({ name: categoryName });
+        const categoryName = data.categoryName.trim(); //the name of the category
+        let categoryDoc = await Category.findOne({ name: categoryName }); //refers to the _id of the category
 
         if (!categoryDoc) {
             categoryDoc = await Category.create({ name: categoryName });
