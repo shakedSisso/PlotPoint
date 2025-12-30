@@ -6,11 +6,11 @@ const shelfSchema = new mongoose.Schema({
         required: true,
     },
     status: {
-        type: Int32,
+        type: Number,
         required: true,
     },
     progress: {
-        type: Int32,
+        type: Number,
         required: true,
     },
     userId: {

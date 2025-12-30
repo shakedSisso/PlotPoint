@@ -10,7 +10,7 @@ const logSchema = new mongoose.Schema({
         required: true,
     },
     currentPage: {
-        type: Int32,
+        type: Number,
         required: true,
     },
     note: {
