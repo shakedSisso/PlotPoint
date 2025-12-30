@@ -1,6 +1,10 @@
 import mongoose from "mongoose";
 
 const shelfSchema = new mongoose.Schema({
+    name: {
+        tyoe: String,
+        required: true,
+    },
     status: {
         type: Int32,
         required: true,
