@@ -36,3 +36,9 @@ export const CreateBuddyReadSharing = z.object({
 export const CreateBuddyRead = z.object({
     shelfId: z.string().min(1, "Select shelf")
 })
+
+export const CreateLogs = z.object({
+    bookID: z.string().min(1, "Select book"),
+    currentPage: z.int32().positive(),
+    note:z.string().min(1, "Enter log")
+})
