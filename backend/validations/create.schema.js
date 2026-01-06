@@ -20,7 +20,7 @@ export const CreateStatus = z.object({
 
 export const CreateShelves = z.object({
     name:z.string().min(1,"Shelf name is required"),
-    status: z.number().int().positive("Select status"),
+    status: z.string().min(1, "Select status"),
     userID: z.string().min(1, "Select User"),
     isPrivate:z.boolean().default(false)
 })
