@@ -6,21 +6,16 @@ const shelfSchema = new mongoose.Schema({
         required: true,
     },
     status: {
-        type: Number,
-        required: true,
-    },
-    progress: {
-        type: Number,
-        required: true,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Status"
     },
     userId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User"
     },
-    bookId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Book"
-    },
+    isPrivate: {
+        type: Boolean
+    }
 });
 
 export const Shelf = mongoose.model('Shelf', shelfSchema);
