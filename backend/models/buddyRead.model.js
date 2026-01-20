@@ -1,9 +1,9 @@
 import mongoose from "mongoose";
 
 const buddyRead = new mongoose.Schema({
-    shelfId: {
+    bookId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Shelf",
+        ref: "Book",
     },
     startDate: {
         type: Date,

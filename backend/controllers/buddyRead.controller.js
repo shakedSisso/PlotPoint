@@ -1,18 +1,19 @@
 import { BuddyRead } from "../models/buddyRead.model.js";
 import { BuddyReadSharing } from "../models/buddyReadSharing.model.js";
 import { Shelf } from "../models/shelf.model.js";
+import { BookInShelf } from "../models/bookInShelf.model.js";
 import { CreateBuddyRead, CreateBuddyReadSharing } from '../validations/create.schema.js';
 
 export async function buddyReadCreation(req, res) {
     try {
         const data = CreateBuddyRead.parse(req.body);
 
-        const existingRead = await BuddyRead.findOne({ shelfId: data.shelfId });
-        if (existingRead) 
-            return res.status(409).json({ success: false, error: "Buddy read already active for this shelf" });
+        const existingRead = await BuddyRead.findOne({ bookId: data.bookId });
+        if (existingRead)
+            return res.status(409).json({ success: false, error: "Buddy read already active for this book" });
 
         const buddyRead = await BuddyRead.create({
-            shelfId: data.shelfId,
+            bookId: data.bookId,
             startDate: new Date(),
             endDate: null
         });
@@ -59,20 +60,27 @@ export async function getMyBuddyReads(req, res) {
     try {
         const userId = req.user.id;
 
-        const sharedEntries = await BuddyReadSharing.find({ 
-            userIdShared: userId.toString() 
+        const sharedEntries = await BuddyReadSharing.find({
+            userIdShared: userId.toString()
         });
         const sharedBuddyReadIds = sharedEntries.map(entry => entry.buddyReadId);
 
         const myShelves = await Shelf.find({ userId: userId }).select('_id');
         const myShelfIds = myShelves.map(shelf => shelf._id);
 
+        const booksInMyShelves = await BookInShelf.find({
+            shelfId: { $in: myShelfIds }
+        }).select('bookId');
+
+        const myBookIds = booksInMyShelves.map(b => b.bookId);
+
+
         const buddyReads = await BuddyRead.find({
             $or: [
                 { _id: { $in: sharedBuddyReadIds } },
-                { shelfId: { $in: myShelfIds } }
+                { bookId: { $in: myBookIds } }
             ]
-        }).populate('shelfId');
+        }).populate('bookId');
 
         res.status(200).json({ success: true, buddyReads });
 
