@@ -5,8 +5,9 @@ export const CreateBook = z.object({
     length: z.coerce.number().positive({ message: "Length must be greater than 0" }),
     author: z.string().min(2, "Author name must be at least 2 chars"),
     categoryName: z.string().min(2, "Category name must be at least 2 chars"),
-    isUserAdded: z.boolean().default(false),
-    isPrivate: z.boolean().default(false)
+    isUserAdded: z.boolean().optional().default(false),
+    isPrivate: z.boolean().optional().default(false),
+
 });
 
 export const CreateCategory = z.object({
@@ -19,10 +20,10 @@ export const CreateStatus = z.object({
 })
 
 export const CreateShelves = z.object({
-    name:z.string().min(1,"Shelf name is required"),
+    name: z.string().min(1, "Shelf name is required"),
     status: z.string().min(1, "Select status"),
     userID: z.string().min(1, "Select User"),
-    isPrivate:z.boolean().default(false)
+    isPrivate: z.boolean().default(false)
 })
 
 export const CreateReviews = z.object({
@@ -38,23 +39,27 @@ export const CreateBuddyReadSharing = z.object({
 })
 
 export const CreateBuddyRead = z.object({
-    shelfId: z.string().min(1, "Select shelf"),
-    StartDate: z.string().or(z.date()),
-    EndDate: z.string().or(z.date())
-}).refine((data) => new Date(data.EndDate) > new Date(data.StartDate), {
-    message: "End date must be after start date",
-    path: ["EndDate"],
-});
+    bookId: z.string().min(1, "Select book"),
+    startDate: z.string().or(z.date()),
+    endDate: z.string().or(z.date())
+}).refine(
+    (data) => new Date(data.endDate) > new Date(data.startDate),
+    {
+        message: "End date must be after start date",
+        path: ["endDate"],
+    }
+);
+
 
 export const CreateLogs = z.object({
     userID: z.string().min(1),
     bookID: z.string().min(1, "Select book"),
     currentPage: z.number().int().nonnegative(),
-    note:z.string().min(1, "Enter log")
+    note: z.string().min(1, "Enter log")
 })
 
 export const CreateBookInShelf = z.object({
-  bookID: z.string().min(1, "Select book"),
-  shelfID: z.string().min(1, "Select shelf"),
-  progress: z.number().int().nonnegative()
+    bookID: z.string().min(1, "Select book"),
+    shelfID: z.string().min(1, "Select shelf"),
+    progress: z.number().int().nonnegative()
 });

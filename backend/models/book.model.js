@@ -16,15 +16,17 @@ const bookSchema = new mongoose.Schema({
     category: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Category",
-        // required: true,
+        required: true,
     },
     isUserAdded: {
         type: Boolean,
         required: true,
+        default: false,
     },
     isPrivate: {
         type: Boolean,
         required: true,
+        default: false,
     }
 });
 

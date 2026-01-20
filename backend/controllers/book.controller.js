@@ -36,7 +36,7 @@ export async function bookCreation(req, res) {
         res.status(201).json({ success: true, book: safeBook });
     } catch (err) {
         if (err.name === "ZodError") {
-            const errors = JSON.parse(err.message).map(e => e.message);
+            const errors = err.issues.map(e => `${e.path.join(".")}: ${e.message}`);
             return res.status(400).json({ success: false, errors });
         }
 
