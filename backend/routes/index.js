@@ -4,6 +4,7 @@ import userRoutes from './users.routes.js';
 import buddyReadRoutes from "./buddyRead.routes.js";
 import bookRoutes from './book.routes.js';
 import shelfRoutes from './shelf.routes.js';
+import logsRoutes from './logs.routes.js'
 
 //used to create routes easily instead of adding them one by one with app.<delete/get/post>
 const router = Router(); 
@@ -14,5 +15,6 @@ router.use("/users", userRoutes);
 router.use("/buddyRead", buddyReadRoutes);
 router.use("/books", bookRoutes);
 router.use("/shelf", shelfRoutes);
+router.use("/logs", logsRoutes);
 
 export default router;
