@@ -1,4 +1,5 @@
 import { User } from "../models/user.model.js";
+import { DeleteUser } from "../validations/upadate.schema.js";
 
 export async function getUsers(req, res) {
     try {
@@ -8,4 +9,34 @@ export async function getUsers(req, res) {
         console.log(err);
         res.status(500).json({ success: false, error: "Server error" });
     }
+}
+
+
+export async function deleteUser(req, res) {
+  try {
+    const { userId } = DeleteUser.parse(req.params);
+
+    const deletedUser = await User.findByIdAndDelete(userId);
+
+    if (!deletedUser) {
+      return res.status(404).json({
+        success: false,
+        error: "User not found"
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "User deleted successfully"
+    });
+
+  } catch (err) {
+    if (err.name === "ZodError") {
+      const errors = err.issues.map(e => `${e.path.join(".")}: ${e.message}`);
+      return res.status(400).json({ success: false, errors });
+    }
+
+    console.log(err);
+    res.status(500).json({ success: false, error: "Server error" });
+  }
 }
