@@ -1,5 +1,4 @@
 import { Shelf } from "../models/shelf.model.js";
-import { Status } from "../models/status.model.js";
 import { BookInShelf } from "../models/bookInShelf.js";
 import { CreateShelves, CreateBookInShelf } from "../validations/create.schema.js";
 
@@ -28,7 +27,7 @@ export async function createShelf(req, res) {
     }
 }
 
-export async function getAllShelves(req, res) {
+export async function getAllShelves(res) {
     try {
         const shelves = await Shelf.find().populate('status');
         res.status(200).json({ success: true, shelves });
