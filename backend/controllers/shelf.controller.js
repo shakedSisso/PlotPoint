@@ -2,17 +2,16 @@ import { Shelf } from "../models/shelf.model.js";
 import { BookInShelf } from "../models/bookInShelf.js";
 import { CreateShelves, CreateBookInShelf } from "../validations/create.schema.js";
 
-import mongoose from "mongoose";
-
 export async function createShelf(req, res) {
     try {
-        const data = CreateShelves.parse(req.body);
+        const payload = { ...req.body, userID: req.user.id };
+        const data = CreateShelves.parse(payload);
 
         const shelf = await Shelf.create({
             name: data.name,
             status: data.status,
             isPrivate: data.isPrivate,
-            userId: data.userID 
+            userId: req.user.id 
         });
 
         res.status(201).json({ success: true, shelf });
@@ -54,8 +53,7 @@ export async function addBookToShelf(req, res) {
             const errors = JSON.parse(err.message).map(e => e.message);
             return res.status(400).json({ success: false, errors });
         }
-        // Handle duplicate entry error (MongoDB code 11000)
-        if (err.code === 11000) {
+        if (err.code === 11000) { // Handle duplicate entry error
             return res.status(409).json({ success: false, error: "This book is already on this shelf" });
         }
         console.log(err);
@@ -69,7 +67,7 @@ export async function getBooksFromShelf(req, res) {
 
         const shelf = await Shelf.findOne({ 
             name: shelfName, 
-            userId: new mongoose.Types.ObjectId("694a530ab0e7ef645b442796") //req.user.id 
+            userId: req.user.id
         });
 
         if (!shelf) {
