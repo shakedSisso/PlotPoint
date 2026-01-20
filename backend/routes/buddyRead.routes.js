@@ -5,7 +5,7 @@ import { buddyReadCreation, shareBuddyRead, getMyBuddyReads } from "../controlle
 const router = Router();
 
 router.post("/create", buddyReadCreation);
-router.post("/share", shareBuddyRead);
+router.post("/:id/share", shareBuddyRead);
 router.get("/", getMyBuddyReads);
 
 export default router;
