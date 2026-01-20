@@ -40,6 +40,16 @@ export async function addBookToShelf(req, res) {
     try {
         const data = CreateBookInShelf.parse(req.body);
 
+        const shelf = await Shelf.findOne({ 
+            _id: data.shelfID, 
+            userId: req.user.id 
+        });
+
+        if (!shelf) {
+            // If the shelf doesn't exist OR it belongs to someone else, we return 404
+            return res.status(404).json({ success: false, error: "Shelf not found" });
+        }
+
         const newEntry = await BookInShelf.create({
             bookId: data.bookID,
             shelfId: data.shelfID,
