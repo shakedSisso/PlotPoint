@@ -1,7 +1,7 @@
 import { BuddyRead } from "../models/buddyRead.model.js";
 import { BuddyReadSharing } from "../models/buddyReadSharing.model.js";
 import { Shelf } from "../models/shelf.model.js";
-import { BookInShelf } from "../models/bookInShelf.model.js";
+import { BookInShelf } from "../models/bookInShelf.js";
 import { CreateBuddyRead, CreateBuddyReadSharing } from '../validations/create.schema.js';
 
 export async function buddyReadCreation(req, res) {
