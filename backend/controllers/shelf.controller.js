@@ -102,6 +102,14 @@ export async function removeBookFromShelf(req, res) {
     try {
         const { shelfId, bookId } = req.params;
 
+        const shelf = await Shelf.findOne({ _id: shelfId, userId: req.user.id });
+        if (!shelf) {
+            return res.status(403).json({
+                success: false,
+                error: "Unauthorized: You do not own this shelf"
+            });
+        }
+
         const deleted = await BookInShelf.findOneAndDelete({
             shelfId,
             bookId
@@ -128,6 +136,14 @@ export async function removeBookFromShelf(req, res) {
 export async function deleteShelf(req, res) {
   try {
     const { shelfId } = req.params;
+
+    const shelf = await Shelf.findOne({ _id: shelfId, userId: req.user.id });
+        if (!shelf) {
+            return res.status(403).json({
+                success: false,
+                error: "Unauthorized: You do not own this shelf"
+            });
+        }
 
     // Check if shelf has books
     const booksCount = await BookInShelf.countDocuments({ shelfId });
