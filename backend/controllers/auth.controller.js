@@ -1,6 +1,20 @@
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 import { User } from "../models/user.model.js";
 import { RegisterUser, LoginUser } from "../validations/auth.schema.js";
+
+const setCookie = (res, userId) => {
+    const token = jwt.sign({ id: userId }, process.env.JWT_SECRET, {
+        expiresIn: "1d",
+    });
+
+    res.cookie("token", token, {
+        httpOnly: true, // Secure: client JS cannot read it
+        secure: process.env.NODE_ENV === "production", // Secure in production
+        sameSite: "strict",
+        maxAge: 24 * 60 * 60 * 1000, // 1 day
+    });
+};
 
 export async function register(req, res) {
     try {
@@ -22,6 +36,8 @@ export async function register(req, res) {
             password: hash,
             isAdmin: false
         });
+
+        setCookie(res, user._id);
 
         const { password, isAdmin, ...safeUser } = user.toObject(); // to send the user it's data without the hashed password
         res.status(201).json({ success: true, user: safeUser });
@@ -46,6 +62,8 @@ export async function login(req, res) {
         if (!ok)
             return res.status(401).json({ success: false, error: "Login failed" });
 
+        setCookie(res, user._id);
+
         const { password, isAdmin, ...safeUser } = user.toObject();  // to send the user it's data without the hashed password
         res.status(200).json({ success: true, user: safeUser });
     } catch (err) {
@@ -56,4 +74,9 @@ export async function login(req, res) {
         console.log(err);
         res.status(500).json({ success: false, error: "Server error" });
     }
+}
+
+export function logout(req, res) {
+    res.clearCookie("token");
+    res.status(200).json({ success: true, message: "Logged out successfully" });
 }
