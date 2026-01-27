@@ -30,7 +30,7 @@ export const CreateReviews = z.object({
     userID: z.string().min(1),
     bookID: z.string().min(1, "Select Book"),
     rating: z.number().int().min(1).max(5),
-    text: z.string().min(2, "Enter reviews")
+    text: z.string()
 })
 
 export const CreateBuddyReadSharing = z.object({
@@ -55,7 +55,7 @@ export const CreateLogs = z.object({
     userID: z.string().min(1),
     bookID: z.string().min(1, "Select book"),
     currentPage: z.number().int().nonnegative(),
-    note: z.string().min(1, "Enter log")
+    note: z.string()
 })
 
 export const CreateBookInShelf = z.object({
