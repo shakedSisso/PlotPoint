@@ -173,3 +173,18 @@ export async function deleteShelf(req, res) {
         });
     }
 }
+
+export async function updateShelf(req, res) {
+    try {
+        const { shelfId } = req.params;
+        const shelf = await Shelf.findOneAndUpdate(
+            { _id: shelfId, userId: req.user.id },
+            req.body,
+            { new: true }
+        );
+        if (!shelf) return res.status(404).json({ success: false, error: "Shelf not found" });
+        res.status(200).json({ success: true, shelf });
+    } catch (err) {
+        res.status(500).json({ success: false, error: "Server error" });
+    }
+}

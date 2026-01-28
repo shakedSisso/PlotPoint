@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { verifyToken } from "../middleware/auth.middleware.js";
-import { createShelf, getAllShelves, addBookToShelf, getBooksFromShelf, removeBookFromShelf, deleteShelf  } from "../controllers/shelf.controller.js";
+import { createShelf, getAllShelves, addBookToShelf, getBooksFromShelf, updateShelf, removeBookFromShelf, deleteShelf  } from "../controllers/shelf.controller.js";
 
 const router = Router();
 router.use(verifyToken);
@@ -10,10 +10,11 @@ router.get("/", getAllShelves);
 
 router.post("/add", addBookToShelf);
 router.get("/:shelfName/books", getBooksFromShelf);
+
+router.put("/:shelfId", updateShelf);
+
 router.delete("/:shelfId/books/:bookId", removeBookFromShelf);
 router.delete("/:shelfId", deleteShelf);
-
-
 
 
 export default router;
