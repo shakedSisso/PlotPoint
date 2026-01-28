@@ -55,3 +55,12 @@ export async function updateBook(req, res) {
 }
 
 
+export async function deleteBook(req, res) {
+    if (!req.user.isAdmin) return res.status(403).json({ success: false, error: "Admin only" });
+    try {
+        await Book.findByIdAndDelete(req.params.id);
+        res.status(200).json({ success: true, message: "Book deleted" });
+    } catch (err) {
+        res.status(500).json({ success: false, error: "Server error" });
+    }
+}

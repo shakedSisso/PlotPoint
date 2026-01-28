@@ -7,6 +7,7 @@ router.use(verifyToken);
 
 router.post("/create", bookCreation);
 router.put("/:id", updateBook);
+router.delete("/:id", deleteBook);
 
 
 export default router;
