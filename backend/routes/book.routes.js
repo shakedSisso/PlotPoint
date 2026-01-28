@@ -2,8 +2,11 @@ import { Router } from "express";
 import { bookCreation} from "../controllers/book.controller.js";
 
 const router = Router();
+router.use(verifyToken);
+
 
 router.post("/create", bookCreation);
+router.put("/:id", updateBook);
 
 
 export default router;

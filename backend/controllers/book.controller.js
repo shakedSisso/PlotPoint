@@ -44,5 +44,14 @@ export async function bookCreation(req, res) {
     }
 }
 
+export async function updateBook(req, res) {
+    if (!req.user.isAdmin) return res.status(403).json({ success: false, error: "Admin only" });
+    try {
+        const book = await Book.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        res.status(200).json({ success: true, book });
+    } catch (err) {
+        res.status(500).json({ success: false, error: "Server error" });
+    }
+}
 
 
