@@ -83,3 +83,33 @@ export async function GetBookReviews(req, res) {
         res.status(500).json({ success: false, error: "Server error" });
     }
 }
+
+export async function updateLog(req, res) {
+    try {
+        const { logId } = req.params;
+        const log = await Log.findOneAndUpdate(
+            { _id: logId, userId: req.user.id },
+            req.body,
+            { new: true }
+        );
+        if (!log) return res.status(404).json({ success: false, error: "Log not found" });
+        res.status(200).json({ success: true, log });
+    } catch (err) {
+        res.status(500).json({ success: false, error: "Server error" });
+    }
+}
+
+export async function updateReview(req, res) {
+    try {
+        const { reviewId } = req.params;
+        const review = await Review.findOneAndUpdate(
+            { _id: reviewId, userId: req.user.id },
+            req.body,
+            { new: true }
+        );
+        if (!review) return res.status(404).json({ success: false, error: "Review not found" });
+        res.status(200).json({ success: true, review });
+    } catch (err) {
+        res.status(500).json({ success: false, error: "Server error" });
+    }
+}
