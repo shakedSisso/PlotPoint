@@ -103,3 +103,16 @@ export async function deleteMe(req, res) {
     session.endSession();
   }
 }
+
+export async function updateProfile(req, res) {
+    try {
+        const updatedUser = await User.findByIdAndUpdate(
+            req.user.id,
+            { name: req.body.name, username: req.body.username },
+            { new: true }
+        ).select("-password");
+        res.status(200).json({ success: true, user: updatedUser });
+    } catch (err) {
+        res.status(500).json({ success: false, error: "Server error" });
+    }
+}
