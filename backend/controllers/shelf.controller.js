@@ -1,8 +1,6 @@
 import { Shelf } from "../models/shelf.model.js";
 import { BookInShelf } from "../models/bookInShelf.js";
 import { CreateShelves, CreateBookInShelf } from "../validations/create.schema.js";
-import { deleteShelfAfterClear } from "../services/shelf.service.js";
-
 
 export async function createShelf(req, res) {
     try {
