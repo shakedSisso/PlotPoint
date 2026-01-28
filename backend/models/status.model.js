@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const statusSchema = new mongoose.Schema({
-    decpription: {
+    description: {
         type: String
     }
 });
