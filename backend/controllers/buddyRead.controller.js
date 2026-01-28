@@ -89,3 +89,65 @@ export async function getMyBuddyReads(req, res) {
         res.status(500).json({ success: false, error: "Server error" });
     }
 }
+
+export async function endBuddyRead(req, res) {
+    try {
+        const { id } = req.params;
+        const buddyRead = await BuddyRead.findOneAndUpdate(
+            { _id: id, createdBy: req.user.id },
+            { endDate: new Date() },
+            { new: true }
+        );
+        if (!buddyRead) return res.status(404).json({ success: false, error: "Buddy read not found or unauthorized" });
+        res.status(200).json({ success: true, buddyRead });
+    } catch (err) {
+        res.status(500).json({ success: false, error: "Server error" });
+    }
+}
+
+export async function deleteBuddyRead(req, res) {
+    try {
+        const { id } = req.params;
+        const userId = req.user.id;
+
+        const buddyRead = await BuddyRead.findOne({ _id: id, createdBy: userId });
+        
+        if (!buddyRead) {
+            return res.status(403).json({ success: false, error: "Unauthorized or Buddy Read not found" });
+        }
+
+        await BuddyRead.findByIdAndDelete(id);
+
+        await BuddyReadSharing.deleteMany({ buddyReadId: id });
+
+        res.status(200).json({ success: true, message: "Buddy Read and all shares deleted" });
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ success: false, error: "Server error" });
+    }
+}
+
+export async function removeSharing(req, res) {
+    try {
+        const { shareId } = req.params;
+        const userId = req.user.id;
+
+        const share = await BuddyReadSharing.findById(shareId).populate('buddyReadId');
+        if (!share) {
+            return res.status(404).json({ success: false, error: "Sharing record not found" });
+        }
+
+        const isCreator = share.buddyReadId.createdBy.toString() === userId;
+        const isSharedUser = share.userIdShared.toString() === userId;
+
+        if (isCreator || isSharedUser) {
+            await BuddyReadSharing.findByIdAndDelete(shareId);
+            return res.status(200).json({ success: true, message: "User removed from buddy read" });
+        }
+
+        res.status(403).json({ success: false, error: "Unauthorized" });
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ success: false, error: "Server error" });
+    }
+}
