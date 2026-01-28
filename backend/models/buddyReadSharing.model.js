@@ -4,9 +4,12 @@ const buddyReadSharing = new mongoose.Schema({
     buddyReadId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "BuddyRead",
+        required: true
     },
     userIdShared: {
-        type:String,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required: true
     }
 });
 
