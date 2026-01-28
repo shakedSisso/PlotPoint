@@ -6,6 +6,9 @@ import { LogsProgress, ReviewCreate, GetBookLogs, GetBookReviews } from "../cont
 const router = Router();
 router.use(verifyToken);
 
-router.post("/createReview", ReviewCreate)
+router.post("/createReview", ReviewCreate);
+router.post("/progress", LogsProgress);
+router.get("/book-logs", GetBookLogs);
+router.get("/reviews/:bookID", GetBookReviews);
 
 export default router;
