@@ -132,10 +132,10 @@ export async function removeBookFromShelf(req, res) {
 }
 
 export async function deleteShelf(req, res) {
-  try {
-    const { shelfId } = req.params;
+    try {
+        const { shelfId } = req.params;
 
-    const shelf = await Shelf.findOne({ _id: shelfId, userId: req.user.id });
+        const shelf = await Shelf.findOne({ _id: shelfId, userId: req.user.id });
         if (!shelf) {
             return res.status(403).json({
                 success: false,
@@ -143,33 +143,33 @@ export async function deleteShelf(req, res) {
             });
         }
 
-    // Check if shelf has books
-    const booksCount = await BookInShelf.countDocuments({ shelfId });
-    if (booksCount > 0) {
-      return res.status(400).json({
-        success: false,
-        error: "Shelf must be empty before deletion"
-      });
+        // Check if shelf has books
+        const booksCount = await BookInShelf.countDocuments({ shelfId });
+        if (booksCount > 0) {
+            return res.status(400).json({
+                success: false,
+                error: "Shelf must be empty before deletion"
+            });
+        }
+
+        const deleted = await Shelf.findByIdAndDelete(shelfId);
+        if (!deleted) {
+            return res.status(404).json({
+                success: false,
+                error: "Shelf not found"
+            });
+        }
+
+        return res.status(200).json({
+            success: true,
+            message: "Shelf deleted successfully"
+        });
+
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({
+            success: false,
+            error: "Server error"
+        });
     }
-
-    const deleted = await Shelf.findByIdAndDelete(shelfId);
-    if (!deleted) {
-      return res.status(404).json({
-        success: false,
-        error: "Shelf not found"
-      });
-    }
-
-    return res.status(200).json({
-      success: true,
-      message: "Shelf deleted successfully"
-    });
-
-  } catch (err) {
-    console.error(err);
-    return res.status(500).json({
-      success: false,
-      error: "Server error"
-    });
-  }
 }
