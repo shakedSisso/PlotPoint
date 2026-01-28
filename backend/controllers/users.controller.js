@@ -65,12 +65,14 @@ export async function deleteMe(req, res) {
       await deleteShelfAfterClear(shelf._id, session);
     }
 
-    // 3) Delete BuddyRead shares created by this user
-    //    (Do NOT delete shares that were made TO this user)
-    await BuddyReadSharing.deleteMany({ sharedBy: userId }).session(session);
+    // 3) Delete BuddyRead shares where user is the recipient
+    await BuddyReadSharing.deleteMany({ userIdShared: userId }).session(session);
 
-    // 4) Delete BuddyReads created by this user
-    //    (Books themselves are NOT deleted)
+    // 4) Delete BuddyReads created by this user and their associated shares
+    const myBuddyReads = await BuddyRead.find({ createdBy: userId }).session(session);
+    const myBuddyReadIds = myBuddyReads.map(br => br._id);
+
+    await BuddyReadSharing.deleteMany({ buddyReadId: { $in: myBuddyReadIds } }).session(session);
     await BuddyRead.deleteMany({ createdBy: userId }).session(session);
 
     // 5) Delete the user account
