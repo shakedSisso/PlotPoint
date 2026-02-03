@@ -2,11 +2,17 @@ import { Shelf } from "../models/shelf.model.js";
 import { BookInShelf } from "../models/bookInShelf.js";
 import { CreateShelves, CreateBookInShelf } from "../validations/create.schema.js";
 
+/**
+ * Creates a new personal shelf for the user.
+ * Attributes include name, visibility (private/public), and reading status.
+ */
 export async function createShelf(req, res) {
     try {
+        // Prepare payload by attaching the authenticated user's ID
         const payload = { ...req.body, userID: req.user.id };
         const data = CreateShelves.parse(payload);
 
+        // Store the new shelf in the database
         const shelf = await Shelf.create({
             name: data.name,
             status: data.status,
@@ -17,6 +23,7 @@ export async function createShelf(req, res) {
         res.status(201).json({ success: true, shelf });
 
     } catch (err) {
+        // Catch and format Zod validation errors for the client
         if (err.name === "ZodError") {
             const errors = JSON.parse(err.message).map(e => e.message);
             return res.status(400).json({ success: false, errors });
@@ -26,6 +33,10 @@ export async function createShelf(req, res) {
     }
 }
 
+/**
+ * Retrieves every shelf in the system.
+ * Populates the 'status' reference field for complete data.
+ */
 export async function getAllShelves(req, res) {
     try {
         const shelves = await Shelf.find().populate('status');
@@ -36,20 +47,26 @@ export async function getAllShelves(req, res) {
     }
 }
 
+/**
+ * Links a book to a specific shelf.
+ * Includes a security check to ensure the shelf belongs to the requester.
+ */
 export async function addBookToShelf(req, res) {
     try {
         const data = CreateBookInShelf.parse(req.body);
 
+        // Verify shelf ownership before allowing the book addition
         const shelf = await Shelf.findOne({ 
             _id: data.shelfID, 
             userId: req.user.id 
         });
 
         if (!shelf) {
-            // If the shelf doesn't exist OR it belongs to someone else, we return 404
+            // Return 404 even if it exists but belongs to another user (security by obscurity)
             return res.status(404).json({ success: false, error: "Shelf not found" });
         }
 
+        // Create the pivot record between book and shelf
         const newEntry = await BookInShelf.create({
             bookId: data.bookID,
             shelfId: data.shelfID,
@@ -63,7 +80,8 @@ export async function addBookToShelf(req, res) {
             const errors = JSON.parse(err.message).map(e => e.message);
             return res.status(400).json({ success: false, errors });
         }
-        if (err.code === 11000) { // Handle duplicate entry error
+        // Handle MongoDB unique constraint errors (e.g., book already on shelf)
+        if (err.code === 11000) {
             return res.status(409).json({ success: false, error: "This book is already on this shelf" });
         }
         console.log(err);
@@ -71,10 +89,15 @@ export async function addBookToShelf(req, res) {
     }
 }
 
+/**
+ * Fetches all books associated with a shelf, identified by its name.
+ * Populates full book details for the response.
+ */
 export async function getBooksFromShelf(req, res) {
     try {
         const { shelfName } = req.params;
 
+        // Find the shelf by name and owner
         const shelf = await Shelf.findOne({ 
             name: shelfName, 
             userId: req.user.id
@@ -84,6 +107,7 @@ export async function getBooksFromShelf(req, res) {
             return res.status(404).json({ success: false, error: "Shelf not found" });
         }
 
+        // Retrieve all entries for this shelf and populate related data
         const books = await BookInShelf.find({ shelfId: shelf._id })
             .populate('bookId')
             .populate('shelfId');
@@ -96,10 +120,15 @@ export async function getBooksFromShelf(req, res) {
     }
 }
 
+/**
+ * Removes a book entry from a specific shelf.
+ * Validates that the user owns the shelf before deletion.
+ */
 export async function removeBookFromShelf(req, res) {
     try {
         const { shelfId, bookId } = req.params;
 
+        // Ensure user owns the shelf
         const shelf = await Shelf.findOne({ _id: shelfId, userId: req.user.id });
         if (!shelf) {
             return res.status(403).json({
@@ -108,6 +137,7 @@ export async function removeBookFromShelf(req, res) {
             });
         }
 
+        // Remove the specific book-to-shelf connection
         const deleted = await BookInShelf.findOneAndDelete({
             shelfId,
             bookId
@@ -131,10 +161,15 @@ export async function removeBookFromShelf(req, res) {
     }
 }
 
+/**
+ * Deletes an entire shelf.
+ * Includes a safety check: the shelf must be empty before it can be deleted.
+ */
 export async function deleteShelf(req, res) {
     try {
         const { shelfId } = req.params;
 
+        // Ownership verification
         const shelf = await Shelf.findOne({ _id: shelfId, userId: req.user.id });
         if (!shelf) {
             return res.status(403).json({
@@ -143,7 +178,7 @@ export async function deleteShelf(req, res) {
             });
         }
 
-        // Check if shelf has books
+        // Prevent deletion if the shelf still contains books (Referential integrity check)
         const booksCount = await BookInShelf.countDocuments({ shelfId });
         if (booksCount > 0) {
             return res.status(400).json({
@@ -174,9 +209,14 @@ export async function deleteShelf(req, res) {
     }
 }
 
+/**
+ * Updates shelf properties (like name or privacy).
+ * Limits updates to the owner of the shelf.
+ */
 export async function updateShelf(req, res) {
     try {
         const { shelfId } = req.params;
+        // Perform update only if owner matches
         const shelf = await Shelf.findOneAndUpdate(
             { _id: shelfId, userId: req.user.id },
             req.body,
