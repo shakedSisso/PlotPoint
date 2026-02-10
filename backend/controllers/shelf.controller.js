@@ -40,7 +40,9 @@ export async function createShelf(req, res) {
  */
 export async function getAllShelves(req, res) {
     try {
-        const shelves = await Shelf.find().populate('status');
+        const shelves = await Shelf.find(
+            {userId: req.user.id}
+        ).populate('status');
         res.status(200).json({ success: true, shelves });
     } catch (err) {
         console.log(err);
