@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { verifyToken } from "../middleware/auth.middleware.js";
 import { bookCreation, updateBook, deleteBook } from "../controllers/book.controller.js";
 
 const router = Router();

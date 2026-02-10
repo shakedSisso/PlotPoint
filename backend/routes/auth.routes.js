@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { verifyToken } from "../middleware/auth.middleware.js";
 import { register, login, logout } from "../controllers/auth.controller.js";
 
 //used to create routes easily instead of adding them one by one with app.<delete/get/post>
