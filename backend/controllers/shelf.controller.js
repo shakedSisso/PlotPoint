@@ -1,5 +1,6 @@
 import { Shelf } from "../models/shelf.model.js";
 import { BookInShelf } from "../models/bookInShelf.js";
+import Status from "../models/status.model.js";
 import { CreateShelves, CreateBookInShelf } from "../validations/create.schema.js";
 
 /**
