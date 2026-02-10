@@ -1,0 +1,24 @@
+.book-detail-container { max-width: 900px; margin: 0 auto; }
+.book-hero {
+  padding: 3rem;
+  background: white;
+  border-radius: 15px;
+  border: 1px solid var(--sand);
+  margin-bottom: 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.progress-bar {
+  width: 200px;
+  height: 8px;
+  background: var(--cream);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.progress-fill { height: 100%; background: var(--terracotta); }
+.log-entry {
+  padding: 1rem;
+  border-bottom: 1px solid var(--sand);
+  margin-bottom: 0.5rem;
+}
