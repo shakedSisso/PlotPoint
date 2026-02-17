@@ -11,8 +11,6 @@ export async function createShelf(req, res) {
     try {
         // Prepare payload by attaching the authenticated user's ID
         const payload = { ...req.body, userID: req.user.id };
-        const data = CreateShelves.parse(payload);
-
         const userCreatedStatus = await Status.findOne({ description: "User Created" });
 
         if (!userCreatedStatus) {
@@ -22,10 +20,12 @@ export async function createShelf(req, res) {
             });
         }
 
-        // Store the new shelf in the database
+        payload.status = userCreatedStatus._id.toString();
+        const data = CreateShelves.parse(payload);
+
         const shelf = await Shelf.create({
             name: data.name,
-            status: userCreatedStatus._id,
+            status: data.status,
             isPrivate: data.isPrivate,
             userId: req.user.id
         });
