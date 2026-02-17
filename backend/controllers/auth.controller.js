@@ -39,10 +39,9 @@ export async function register(req, res) {
             isAdmin: false
         });
 
-        // --- Start of automatic shelf creation ---
 
         // Fetch all statuses except for "USERCREATER"
-        const defaultStatuses = await Status.find({ description: { $ne: "USERCREATER" } });
+        const defaultStatuses = await Status.find({ description: { $ne: "User created" } });
 
         // Create an array of shelf objects, one for each found status
         const shelvesToCreate = defaultStatuses.map((status) => ({
@@ -57,7 +56,6 @@ export async function register(req, res) {
             await Shelf.insertMany(shelvesToCreate);
         }
 
-        // --- End of automatic shelf creation ---
 
         setCookie(res, user._id);
 
