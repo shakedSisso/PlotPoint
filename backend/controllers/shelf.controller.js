@@ -49,10 +49,23 @@ export async function createShelf(req, res) {
  */
 export async function getAllShelves(req, res) {
     try {
-        const shelves = await Shelf.find(
-            { userId: req.user.id }
-        );
-        res.status(200).json({ success: true, shelves });
+        // 1. Fetch user's shelves and use .lean() to allow modifying the result object
+        const shelves = await Shelf.find({ userId: req.user.id }).lean();
+
+        // 2. Fetch up to 3 books for each shelf to serve as a preview
+        const shelvesWithBooks = await Promise.all(shelves.map(async (shelf) => {
+            const booksInShelf = await BookInShelf.find({ shelfId: shelf._id })
+                .populate('bookId', 'name author') // Only bring the name and author
+                .limit(3) // Get max 3 books for the preview
+                .lean();
+
+            return {
+                ...shelf,
+                previewBooks: booksInShelf.map(entry => entry.bookId) // Extract just the book details
+            };
+        }));
+
+        res.status(200).json({ success: true, shelves: shelvesWithBooks });
     } catch (err) {
         console.log(err);
         res.status(500).json({ success: false, error: "Server error" });
