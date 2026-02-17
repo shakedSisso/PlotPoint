@@ -44,6 +44,16 @@ export async function bookCreation(req, res) {
     }
 }
 
+export async function getAllBooks(req, res) {
+    try {
+        const books = await Book.find({ isPrivate: false }).populate('category');
+        res.status(200).json(books);
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ success: false, error: "Server error" });
+    }
+}
+
 export async function updateBook(req, res) {
     if (!req.user.isAdmin) return res.status(403).json({ success: false, error: "Admin only" });
     try {
@@ -53,7 +63,6 @@ export async function updateBook(req, res) {
         res.status(500).json({ success: false, error: "Server error" });
     }
 }
-
 
 export async function deleteBook(req, res) {
     if (!req.user.isAdmin) return res.status(403).json({ success: false, error: "Admin only" });
