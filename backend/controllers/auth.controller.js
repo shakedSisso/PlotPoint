@@ -2,6 +2,8 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { User } from "../models/user.model.js";
 import { RegisterUser, LoginUser } from "../validations/auth.schema.js";
+import { Shelf } from "../models/shelf.model.js";
+import Status from "../models/status.model.js";
 
 const setCookie = (res, userId) => {
     const token = jwt.sign({ id: userId }, process.env.JWT_SECRET, {
@@ -37,6 +39,26 @@ export async function register(req, res) {
             isAdmin: false
         });
 
+        // --- Start of automatic shelf creation ---
+
+        // Fetch all statuses except for "USERCREATER"
+        const defaultStatuses = await Status.find({ description: { $ne: "USERCREATER" } });
+
+        // Create an array of shelf objects, one for each found status
+        const shelvesToCreate = defaultStatuses.map((status) => ({
+            name: status.description, // Shelf name will match the status description
+            status: status._id,       // Link to the status ID
+            userId: user._id,         // Assign to the newly created user
+            isPrivate: false          // Set shelves to public by default
+        }));
+
+        // Save all shelves to the database in a single operation
+        if (shelvesToCreate.length > 0) {
+            await Shelf.insertMany(shelvesToCreate);
+        }
+
+        // --- End of automatic shelf creation ---
+
         setCookie(res, user._id);
 
         const { password, isAdmin, ...safeUser } = user.toObject(); // to send the user it's data without the hashed password
@@ -44,7 +66,7 @@ export async function register(req, res) {
     } catch (err) {
         if (err.name === "ZodError") {
             const errors = JSON.parse(err.message).map(e => e.message);
-            return res.status(400).json({ success: false, errors});
+            return res.status(400).json({ success: false, errors });
         }
         console.log(err);
         return res.status(500).json({ success: false, error: "Server error" });
@@ -67,9 +89,9 @@ export async function login(req, res) {
         const { password, isAdmin, ...safeUser } = user.toObject();  // to send the user it's data without the hashed password
         res.status(200).json({ success: true, user: safeUser });
     } catch (err) {
-        if (err.name === "ZodError"){
+        if (err.name === "ZodError") {
             const errors = JSON.parse(err.message).map(e => e.message);
-            return res.status(400).json({ success: false, errors});
+            return res.status(400).json({ success: false, errors });
         }
         console.log(err);
         res.status(500).json({ success: false, error: "Server error" });
