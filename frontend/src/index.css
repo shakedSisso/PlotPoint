@@ -81,6 +81,74 @@ body {
   white-space: nowrap;
 }
 
+.logout-btn {
+  background: none;
+  border: none;
+  color: var(--coffee);
+  font-weight: 500;
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 0;
+}
+
+.home-hero {
+  text-align: center;
+  padding: 3rem 1rem;
+}
+
+.home-category-section {
+  margin-top: 40px;
+  margin-bottom: 20px;
+}
+
+.category-label {
+  font-size: 1.4rem;
+  color: var(--coffee);
+  border-bottom: 2px solid var(--sand);
+  padding-bottom: 8px;
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.books-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 20px;
+}
+
+.book-card {
+  text-decoration: none;
+  color: inherit;
+  transition: 0.2s;
+}
+
+.book-card:hover {
+  transform: scale(1.02);
+}
+
+.book-cover {
+  background-color: var(--buttercream);
+  height: 200px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+  margin-bottom: 10px;
+}
+
+.book-info h3 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.book-info p {
+  margin: 4px 0;
+  font-size: 0.85rem;
+  opacity: 0.8;
+}
+
 @media (max-width: 480px) {
   .logo-text {
     display: none;
@@ -98,13 +166,17 @@ body {
     gap: 12px;
   }
 
-  .nav-links a {
+  .nav-links a, .logout-btn {
     font-size: 0.9rem;
   }
 
   .btn-cta {
     padding: 6px 12px;
     font-size: 0.85rem;
+  }
+
+  .books-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 

@@ -6,10 +6,25 @@ import Profile from './pages/Profile';
 import ShelfView from './pages/ShelfView';
 import BookDetail from './pages/BookDetail';
 import logo from './assets/logo.png';
+import api from './utils/api';
 import './App.css';
 
 function App() {
   const [user, setUser] = useState(JSON.parse(localStorage.getItem('user')));
+  const [books, setBooks] = useState([]);
+
+  useEffect(() => {
+    fetchBooks();
+  }, []);
+
+  const fetchBooks = async () => {
+    try {
+      const res = await api.get('/book'); 
+      setBooks(res.data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   return (
     <Router>
@@ -40,11 +55,9 @@ function App() {
 
         <main className="container">
           <Routes>
-            <Route path="/" element={<Home />} />
+            <Route path="/" element={<Home books={books} />} />
             <Route path="/login" element={<Login setUser={setUser} />} />
             <Route path="/register" element={<Register setUser={setUser}/>} />
-            
-            {/* Protected Routes */}
             <Route path="/profile" element={user ? <Profile user={user} /> : <Navigate to="/login" />} />
             <Route path="/shelf/:shelfName" element={user ? <ShelfView user={user} /> : <Navigate to="/login" />} />
             <Route path="/book/:bookId" element={user ? <BookDetail user={user} /> : <Navigate to="/login" />} />
@@ -59,11 +72,43 @@ function App() {
   );
 }
 
-const Home = () => (
-  <div className="home-hero">
-    <h1>Your Library, <span style={{color:'var(--terracotta)'}}>Digitized.</span></h1>
-    <p>Organize shelves, track progress, and read together.</p>
-  </div>
-);
+const Home = ({ books }) => {
+  const groupedBooks = books.reduce((acc, book) => {
+    const categoryName = book.category?.name || "General";
+    if (!acc[categoryName]) {
+      acc[categoryName] = [];
+    }
+    acc[categoryName].push(book);
+    return acc;
+  }, {});
+
+  return (
+    <div className="home-page">
+      <div className="home-hero">
+        <h1>Your Library, <span style={{color:'var(--terracotta)'}}>Digitized.</span></h1>
+        <p>Organize shelves, track progress, and read together.</p>
+      </div>
+
+      <div className="categories-list">
+        {Object.keys(groupedBooks).map(category => (
+          <div key={category} className="home-category-section">
+            <h2 className="category-label">{category}</h2>
+            <div className="books-grid">
+              {groupedBooks[category].map(book => (
+                <Link to={`/book/${book._id}`} key={book._id} className="book-card">
+                  <div className="book-cover">📚</div>
+                  <div className="book-info">
+                    <h3>{book.name}</h3>
+                    <p>{book.author}</p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
 
 export default App;
