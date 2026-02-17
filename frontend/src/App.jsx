@@ -19,7 +19,7 @@ function App() {
 
   const fetchBooks = async () => {
     try {
-      const res = await api.get('/book'); 
+      const res = await api.get('/books'); 
       setBooks(res.data);
     } catch (err) {
       console.error(err);
