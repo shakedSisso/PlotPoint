@@ -20,7 +20,7 @@ h1, h2, h3, h4 { color: var(--coffee); margin: 0 0 1rem 0; }
 
 .btn-cta {
   background-color: var(--terracotta);
-  color: var(--white);
+  color: var(--cream)!important;
   border: none;
   padding: 10px 20px;
   border-radius: 6px;
