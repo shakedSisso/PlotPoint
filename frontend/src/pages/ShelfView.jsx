@@ -19,7 +19,7 @@ const ShelfView = () => {
     fetchBooks();
   }, [shelfName]);
 
-  // Helper function to render stars (read-only view)
+  // Helper for read-only star display
   const renderStars = (rating) => {
     const stars = [];
     for (let i = 1; i <= 5; i++) {
@@ -39,58 +39,74 @@ const ShelfView = () => {
 
   return (
     <div className="shelf-view-container">
+      {/* Navigation: Back Button */}
+      <div className="shelf-actions">
+        <Link to="/profile" className="btn-back">
+          ← Back to Profile
+        </Link>
+      </div>
+
       <div className="shelf-header">
         <h1>{shelfName}</h1>
         <div className="divider"></div>
       </div>
 
-      <div className="book-list">
+      {/* Grid container for book cards */}
+      <div className="book-grid">
         {books.length > 0 ? books.map(entry => {
           const book = entry.bookId;
           const categoryName = book.category?.name || "Uncategorized";
 
-          // Calculate reading percentage based on progress divided by total book length
+          // Calculating visual progress based on backend data
           const progressPercentage = book.length
             ? Math.min(Math.round((entry.progress / book.length) * 100), 100)
             : 0;
 
-          // Normalize the shelf name to lowercase for easy comparison
           const currentShelf = shelfName.toLowerCase();
 
           return (
-            <Link to={`/book/${book._id}`} key={entry._id} className="book-card-horizontal">
-              <div className="book-info">
-                <h3>{book.name}</h3>
-                <p className="book-meta">
-                  {book.author} • {categoryName}
-                </p>
+            <Link to={`/book/${book._id}`} key={entry._id} className="book-card-vertical">
+              
+              {/* Cover Placeholder */}
+              <div className="book-cover-placeholder">
+                {book.name ? book.name.charAt(0).toUpperCase() : '?'}
               </div>
 
-              <div className="book-status-ui">
+              {/* Card Body */}
+              <div className="book-card-content">
+                <div className="book-info">
+                  <h3>{book.name}</h3>
+                  <p className="book-meta">{book.author} • {categoryName}</p>
+                </div>
 
-                {/* Show Progress Bar only in READING shelf */}
-                {currentShelf.includes('reading') && (
-                  <div className="progress-container">
-                    <div className="progress-bar-bg">
-                      <div
-                        className="progress-fill"
-                        style={{ width: `${progressPercentage}%` }}
-                      ></div>
+                <div className="book-status-ui">
+                  {/* PROGRESS BAR: Displayed only in READING shelves */}
+                  {currentShelf.includes('reading') && (
+                    <div className="progress-container">
+                      <div className="progress-bar-bg">
+                        {/* Bar fill */}
+                        <div
+                          className="progress-fill"
+                          style={{ width: `${progressPercentage}%` }}
+                        ></div>
+                        {/* Centered percentage text */}
+                        <div className="progress-text-overlay">
+                          {progressPercentage}%
+                        </div>
+                      </div>
                     </div>
-                    <span className="progress-text">{progressPercentage}%</span>
-                  </div>
-                )}
+                  )}
 
-                {/* Show Stars only in FINISHED shelf */}
-                {currentShelf.includes('finished') && (
-                  <div className="rating-container">
-                    {renderStars(entry.rating)}
-                  </div>
-                )}
-
+                  {/* STARS: Displayed only in FINISHED shelves */}
+                  {currentShelf.includes('finished') && (
+                    <div className="rating-container">
+                      {renderStars(entry.rating)}
+                    </div>
+                  )}
+                </div>
               </div>
             </Link>
-          )
+          );
         }) : (
           <p className="empty-message">No books in this shelf yet.</p>
         )}
