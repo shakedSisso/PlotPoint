@@ -41,7 +41,7 @@ export async function register(req, res) {
 
 
         // Fetch all statuses except for "USERCREATER"
-        const defaultStatuses = await Status.find({ description: { $ne: "User created" } });
+        const defaultStatuses = await Status.find({ description: { $ne: "User Created" } });
 
         // Create an array of shelf objects, one for each found status
         const shelvesToCreate = defaultStatuses.map((status) => ({
