@@ -73,3 +73,21 @@ export async function deleteBook(req, res) {
         res.status(500).json({ success: false, error: "Server error" });
     }
 }
+
+// Get a single book by its ID
+export async function getBookById(req, res) {
+    try {
+        const { id } = req.params;
+        // Find the book and bring the category name as well
+        const book = await Book.findById(id).populate('category');
+
+        if (!book) {
+            return res.status(404).json({ success: false, message: "Book not found" });
+        }
+
+        res.status(200).json({ success: true, book });
+    } catch (err) {
+        console.error("Error in getBookById:", err);
+        res.status(500).json({ success: false, error: "Server error" });
+    }
+}

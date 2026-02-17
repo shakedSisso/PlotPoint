@@ -270,3 +270,20 @@ export async function updateShelf(req, res) {
         res.status(500).json({ success: false, error: "Server error" });
     }
 }
+
+// Check if a specific book is on a shelf for the current user
+export async function getBookStatus(req, res) {
+    try {
+        const { bookId } = req.params;
+        const entry = await BookInShelf.findOne({ 
+            bookId, 
+            userId: req.user.id 
+        }).populate('shelfId');
+
+        // It's okay if entry is null, it means the book isn't on any shelf
+        res.status(200).json({ success: true, entry });
+    } catch (err) {
+        console.error("Error in getBookStatus:", err);
+        res.status(500).json({ success: false, error: "Server error" });
+    }
+}
