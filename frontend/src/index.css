@@ -1,9 +1,9 @@
 :root {
-  --terracotta: #B77466; /* Buttons & Links */
-  --coffee: #957C62;     /* Headlines & Text */
-  --buttercream: #FFE1AF; /* Feature Backgrounds */
-  --sand: #E2B59A;       /* Borders & Footers */
-  --cream: #FAF7F2;      /* Main Body Background */
+  --terracotta: #B77466;
+  --coffee: #957C62;
+  --buttercream: #FFE1AF;
+  --sand: #E2B59A;
+  --cream: #FAF7F2;
 }
 
 * { box-sizing: border-box; }
@@ -16,27 +16,101 @@ body {
   line-height: 1.5;
 }
 
-h1, h2, h3, h4 { color: var(--coffee); margin: 0 0 1rem 0; }
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.main-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.8rem 1.5rem;
+  background-color: var(--cream);
+  border-bottom: 1px solid var(--sand);
+  flex-wrap: nowrap;
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  flex-shrink: 1;
+}
+
+.logo-img {
+  height: 60px;
+  width: auto;
+}
+
+.logo-text {
+  font-weight: bold;
+  font-size: 1.3rem;
+  color: var(--coffee);
+  white-space: nowrap;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  flex-shrink: 0;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: var(--coffee);
+  font-weight: 500;
+  font-size: 1rem;
+}
 
 .btn-cta {
   background-color: var(--terracotta);
-  color: var(--white);
+  color: var(--cream) !important;
   border: none;
-  padding: 10px 20px;
+  padding: 8px 16px;
   border-radius: 6px;
   font-weight: bold;
   cursor: pointer;
-  transition: opacity 0.2s;
+  text-decoration: none !important;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  white-space: nowrap;
 }
 
-.btn-cta:hover { opacity: 0.9; }
+@media (max-width: 480px) {
+  .logo-text {
+    display: none;
+  }
 
-.feature-section {
-  background-color: var(--buttercream);
-  padding: 2rem;
-  border-radius: 10px;
-  margin: 1.5rem 0;
+  .logo-img {
+    height: 65px;
+  }
+
+  .main-nav {
+    padding: 0.5rem 1rem;
+  }
+
+  .nav-links {
+    gap: 12px;
+  }
+
+  .nav-links a {
+    font-size: 0.9rem;
+  }
+
+  .btn-cta {
+    padding: 6px 12px;
+    font-size: 0.85rem;
+  }
+}
+
+.main-footer {
+  background-color: var(--sand);
+  padding: 1rem;
+  text-align: center;
+  margin-top: auto;
 }

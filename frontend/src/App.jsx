@@ -5,6 +5,7 @@ import Register from './pages/Register';
 import Profile from './pages/Profile';
 import ShelfView from './pages/ShelfView';
 import BookDetail from './pages/BookDetail';
+import logo from './assets/logo.png';
 import './App.css';
 
 function App() {
@@ -14,7 +15,10 @@ function App() {
     <Router>
       <div className="app-wrapper">
         <nav className="main-nav">
-          <Link to="/" className="logo">PlotPoint</Link>
+          <Link to="/" className="logo-container">
+            <img src={logo} alt="PlotPoint Logo" className="logo-img" />
+            <span className="logo-text">PlotPoint</span>
+          </Link>
           <div className="nav-links">
             {user ? (
               <>

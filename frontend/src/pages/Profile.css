@@ -24,6 +24,17 @@
   color: var(--cream) !important;
 }
 
+.create-shelf-form {
+  display: flex;
+  gap: 10px;
+}
+
+.create-shelf-form input {
+  padding: 8px 12px;
+  border: 1px solid var(--sand);
+  border-radius: 4px;
+}
+
 .shelf-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
@@ -32,16 +43,70 @@
 
 .shelf-card {
   background-color: var(--white);
-  padding: 2rem;
+  padding: 1.5rem;
   border: 1px solid var(--sand);
   border-radius: 8px;
   text-decoration: none;
-  transition: transform 0.2s, border-color 0.2s;
+  transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+  display: flex;
+  flex-direction: column;
+  min-height: 160px;
+  color: var(--coffee);
 }
 
 .shelf-card:hover {
   transform: translateY(-4px);
   border-color: var(--terracotta);
+  box-shadow: 0 4px 12px rgba(149, 124, 98, 0.15);
+}
+
+.shelf-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.shelf-card-header h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  text-transform: capitalize;
+}
+
+.shelf-preview-container {
+  display: flex;
+  gap: 8px;
+  margin-top: auto;
+  align-items: flex-end;
+}
+
+.mini-book {
+  width: 35px;
+  height: 50px;
+  background-color: var(--terracotta);
+  color: var(--cream);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 1.2rem;
+  border-radius: 3px 6px 6px 3px;
+  /* Book spine effect */
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+  border-left: 3px solid rgba(0, 0, 0, 0.15);
+  /* Adds a binding shadow */
+  transition: transform 0.2s;
+}
+
+.shelf-card:hover .mini-book {
+  transform: translateY(-3px) rotate(2deg);
+}
+
+.empty-shelf {
+  font-size: 0.85rem;
+  color: var(--coffee);
+  opacity: 0.6;
+  font-style: italic;
 }
 
 .shelf-badge {
