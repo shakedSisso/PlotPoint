@@ -13,12 +13,21 @@ export async function createShelf(req, res) {
         const payload = { ...req.body, userID: req.user.id };
         const data = CreateShelves.parse(payload);
 
+        const userCreatedStatus = await Status.findOne({ description: "User Created" });
+
+        if (!userCreatedStatus) {
+            return res.status(500).json({
+                success: false,
+                error: "Status not found in database"
+            });
+        }
+
         // Store the new shelf in the database
         const shelf = await Shelf.create({
             name: data.name,
-            status: data.status,
+            status: userCreatedStatus._id,
             isPrivate: data.isPrivate,
-            userId: req.user.id 
+            userId: req.user.id
         });
 
         res.status(201).json({ success: true, shelf });
@@ -41,7 +50,7 @@ export async function createShelf(req, res) {
 export async function getAllShelves(req, res) {
     try {
         const shelves = await Shelf.find(
-            {userId: req.user.id}
+            { userId: req.user.id }
         );
         res.status(200).json({ success: true, shelves });
     } catch (err) {
@@ -59,9 +68,9 @@ export async function addBookToShelf(req, res) {
         const data = CreateBookInShelf.parse(req.body);
 
         // Verify shelf ownership before allowing the book addition
-        const shelf = await Shelf.findOne({ 
-            _id: data.shelfID, 
-            userId: req.user.id 
+        const shelf = await Shelf.findOne({
+            _id: data.shelfID,
+            userId: req.user.id
         });
 
         if (!shelf) {
@@ -101,8 +110,8 @@ export async function getBooksFromShelf(req, res) {
         const { shelfName } = req.params;
 
         // Find the shelf by name and owner
-        const shelf = await Shelf.findOne({ 
-            name: shelfName, 
+        const shelf = await Shelf.findOne({
+            name: shelfName,
             userId: req.user.id
         });
 
