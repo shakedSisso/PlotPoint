@@ -2,6 +2,7 @@ import { Shelf } from "../models/shelf.model.js";
 import { BookInShelf } from "../models/bookInShelf.js";
 import Status from "../models/status.model.js";
 import { CreateShelves, CreateBookInShelf } from "../validations/create.schema.js";
+import { Review } from "../models/review.model.js";
 
 /**
  * Creates a new personal shelf for the user.
@@ -122,7 +123,6 @@ export async function getBooksFromShelf(req, res) {
     try {
         const { shelfName } = req.params;
 
-        // Find the shelf by name and owner
         const shelf = await Shelf.findOne({
             name: shelfName,
             userId: req.user.id
@@ -132,12 +132,29 @@ export async function getBooksFromShelf(req, res) {
             return res.status(404).json({ success: false, error: "Shelf not found" });
         }
 
-        // Retrieve all entries for this shelf and populate related data
-        const books = await BookInShelf.find({ shelfId: shelf._id })
-            .populate('bookId')
-            .populate('shelfId');
+        // Fetch books in the shelf and populate the book's category
+        const booksInShelf = await BookInShelf.find({ shelfId: shelf._id })
+            .populate({
+                path: 'bookId',
+                populate: { path: 'category' } // Fetches the category details
+            })
+            .populate('shelfId')
+            .lean(); // Allows us to modify the object before sending it
 
-        res.status(200).json({ success: true, books });
+        // Find the rating (Review) for each book in the shelf for the current user
+        const booksWithDetails = await Promise.all(booksInShelf.map(async (entry) => {
+            const review = await Review.findOne({
+                userId: req.user.id,
+                bookId: entry.bookId._id
+            }).lean();
+
+            return {
+                ...entry,
+                rating: review ? review.rating : null // Attaches the rating if it exists
+            };
+        }));
+
+        res.status(200).json({ success: true, books: booksWithDetails });
 
     } catch (err) {
         console.log(err);
