@@ -7,6 +7,7 @@ const Profile = ({ user }) => {
   const [shelves, setShelves] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
+  const [newShelf, setNewShelf] = useState({ name: '', isPrivate: false });
 
   useEffect(() => {
     fetchShelves();
@@ -20,6 +21,20 @@ const Profile = ({ user }) => {
       console.error(err);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleCreateShelf = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await api.post('/shelf/create', newShelf);
+      if (res.data.success) {
+        setShelves([...shelves, res.data.shelf]);
+        setShowModal(false);
+        setNewShelf({ name: '', isPrivate: false });
+      }
+    } catch (err) {
+      console.log(err);
     }
   };
 
@@ -46,6 +61,41 @@ const Profile = ({ user }) => {
           </Link>
         )) : <p>No shelves found. Create one to get started!</p>}
       </div>
+
+      {showModal && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <h2>Create New Shelf</h2>
+            <form onSubmit={handleCreateShelf}>
+              <div className="form-group">
+                <label>Shelf Name</label>
+                <input 
+                  type="text" 
+                  required 
+                  value={newShelf.name}
+                  onChange={(e) => setNewShelf({...newShelf, name: e.target.value})}
+                />
+              </div>
+              
+              <div className="form-group">
+                <label>Visibility</label>
+                <select 
+                  value={newShelf.isPrivate} 
+                  onChange={(e) => setNewShelf({...newShelf, isPrivate: e.target.value === 'true'})}
+                >
+                  <option value="false">Public</option>
+                  <option value="true">Private</option>
+                </select>
+              </div>
+
+              <div className="modal-actions">
+                <button type="button" className="btn-secondary" onClick={() => setShowModal(false)}>Cancel</button>
+                <button type="submit" className="btn-cta">Create Shelf</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
