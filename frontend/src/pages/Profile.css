@@ -1,15 +1,28 @@
-.dash-header {
+.profile-header-container {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--sand);
 }
 
-.create-shelf-form { display: flex; gap: 10px; }
-.create-shelf-form input {
-  padding: 8px 12px;
-  border: 1px solid var(--sand);
-  border-radius: 4px;
+.user-info h1 {
+  margin: 0;
+  font-size: 1.8rem;
+}
+
+.username-display {
+  margin: 0;
+  color: var(--coffee);
+  opacity: 0.8;
+  font-weight: 500;
+}
+
+.profile-header-container .btn-cta {
+  white-space: nowrap;
+  height: fit-content;
+  color: var(--cream) !important;
 }
 
 .shelf-grid {

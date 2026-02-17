@@ -6,6 +6,7 @@ import './Profile.css';
 const Profile = ({ user }) => {
   const [shelves, setShelves] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     fetchShelves();
@@ -14,7 +15,6 @@ const Profile = ({ user }) => {
   const fetchShelves = async () => {
     try {
       const res = await api.get('/shelf');
-      console.log(res);
       setShelves(res.data.shelves);
     } catch (err) {
       console.error(err);
@@ -27,9 +27,15 @@ const Profile = ({ user }) => {
 
   return (
     <div className="profile-page">
-      <header className="profile-header">
-        <h1>Welcome, {user.name}</h1>
-        <p>@{user.username}</p>
+      { }
+      <header className="profile-header-container">
+        <div className="user-info">
+          <h1>Welcome, {user.name}</h1>
+          <p className="username-display">@{user.username}</p>
+        </div>
+        <button className="btn-cta" onClick={() => setShowModal(true)}>
+          + Create New Shelf
+        </button>
       </header>
 
       <div className="shelf-grid">
