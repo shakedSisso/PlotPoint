@@ -104,32 +104,40 @@ Each book document includes:
 ```bash
 git clone https://github.com/shakedsisso/plotpoint.git
 cd plotpoint
-2️⃣ Backend Setup
+```
+## 2️⃣ Backend Setup
+```bash
 cd backend
 npm install
+```
 
-Create a .env file:
-
-PORT=5000
+Create a `.env` file:
+```
 MONGO_URI=your_mongodb_connection
 JWT_SECRET=your_secret_key
+```
 
 Run backend server:
-
-npm run dev
+```bash
+npm start
+```
 
 Backend runs on:
-
 http://localhost:5000
-3️⃣ Frontend Setup
+
+
+## 3️⃣ Frontend Setup
+```bash
 cd ../frontend
 npm install
 npm run dev
+```
 
 Frontend runs on:
-
 http://localhost:5173
-🔌 API Flow Example (Add Book by ISBN)
+
+
+### 🔌 API Flow Example (Add Book by ISBN)
 
 User enters ISBN in modal
 
@@ -151,7 +159,10 @@ Normalizes cover image
 
 Saves book to MongoDB
 
-📂 Project Structure
+---
+
+### 📂 Project Structure
+```
 plotpoint/
 │
 ├── frontend/
@@ -166,28 +177,32 @@ plotpoint/
 │   ├── routes/
 │   ├── middleware/
 │   └── server.js
-🎨 Design Philosophy
+```
+
+---
+
+### 🎨 Design Philosophy
 
 The UI uses a warm, minimal color palette defined in global CSS variables:
 
 Terracotta
-
 Coffee
-
 Cream
-
 Buttercream
-
 Sand
 
 The modal and book cards follow a clean card-based layout designed for readability and smooth interaction.
 
-🔐 Authentication
+---
+
+### 🔐 Authentication
 
 Protected routes use JWT verification middleware.
 Only authenticated users can create or modify books.
 
-📈 Future Improvements
+---
+
+### 📈 Future Improvements
 
 Advanced search and filtering
 
@@ -201,7 +216,9 @@ Enhanced book recommendations
 
 Pagination & performance optimization
 
-👩‍💻 Development Notes
+---
+
+### 👩‍💻 Development Notes
 
 This project focuses on:
 
@@ -215,7 +232,9 @@ Real API integration
 
 Scalable structure suitable for larger systems
 
-🏁 Running the Full System
+---
+
+### 🏁 Running the Full System
 
 Start MongoDB
 
