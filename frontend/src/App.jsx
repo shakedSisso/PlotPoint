@@ -19,7 +19,7 @@ function App() {
 
   const fetchBooks = async () => {
     try {
-      const res = await api.get('/books'); 
+      const res = await api.get('/books');
       setBooks(res.data);
     } catch (err) {
       console.error(err);
@@ -35,14 +35,15 @@ function App() {
             <span className="logo-text">PlotPoint</span>
           </Link>
           <div className="nav-links">
+            <Link to="/explore" className="nav-item">Explore</Link>
             {user ? (
               <>
+                <Link to="/profile">Profile</Link>
                 <button className="logout-btn" onClick={() => {
                   localStorage.removeItem('user');
                   setUser(null);
                   window.location.href = '/login';
                 }}>Logout</button>
-                <Link to="/profile">Profile</Link>
               </>
             ) : (
               <>
@@ -57,7 +58,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Home books={books} />} />
             <Route path="/login" element={<Login setUser={setUser} />} />
-            <Route path="/register" element={<Register setUser={setUser}/>} />
+            <Route path="/register" element={<Register setUser={setUser} />} />
             <Route path="/profile" element={user ? <Profile user={user} /> : <Navigate to="/login" />} />
             <Route path="/shelf/:shelfName" element={user ? <ShelfView user={user} /> : <Navigate to="/login" />} />
             <Route path="/book/:bookId" element={user ? <BookDetail user={user} /> : <Navigate to="/login" />} />
@@ -85,7 +86,7 @@ const Home = ({ books }) => {
   return (
     <div className="home-page">
       <div className="home-hero">
-        <h1>Your Library, <span style={{color:'var(--terracotta)'}}>Digitized.</span></h1>
+        <h1>Your Library, <span style={{ color: 'var(--terracotta)' }}>Digitized.</span></h1>
         <p>Organize shelves, track progress, and read together.</p>
       </div>
 
