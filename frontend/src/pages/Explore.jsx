@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../utils/api';
-import '../index.css';
+import AddBookModal from './AddBookModal';
 import './Explore.css';
+import '../index.css'
 
 const Explore = () => {
   const [books, setBooks] = useState([]);
@@ -11,27 +12,21 @@ const Explore = () => {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
-  
-  // Custom dropdown state
   const [isOpen, setIsOpen] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     const fetchExploreData = async () => {
       try {
         setLoading(true);
         const res = await api.get('/books');
-        
-        const sortedBooks = res.data.sort((a, b) => 
-          new Date(b.createdAt) - new Date(a.createdAt)
-        );
-
-        setBooks(sortedBooks);
-        setFilteredBooks(sortedBooks);
-
-        const uniqueCategories = ["All", ...new Set(sortedBooks.map(book => book.category?.name).filter(Boolean))];
-        setCategories(uniqueCategories);
+        const sorted = res.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        setBooks(sorted);
+        setFilteredBooks(sorted);
+        const uniqueCats = ["All", ...new Set(sorted.map(b => b.category?.name).filter(Boolean))];
+        setCategories(uniqueCats);
       } catch (err) {
-        console.error("Error fetching explore data:", err);
+        console.error(err);
       } finally {
         setLoading(false);
       }
@@ -41,23 +36,18 @@ const Explore = () => {
 
   useEffect(() => {
     const filtered = books.filter(book => {
-      const matchesSearch = 
-        book.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        book.author.toLowerCase().includes(searchTerm.toLowerCase());
-      
-      const matchesCategory = 
-        selectedCategory === "All" || 
-        book.category?.name === selectedCategory;
-
-      return matchesSearch && matchesCategory;
+      const matchesSearch = book.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                            book.author.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesCat = selectedCategory === "All" || book.category?.name === selectedCategory;
+      return matchesSearch && matchesCat;
     });
     setFilteredBooks(filtered);
   }, [searchTerm, selectedCategory, books]);
 
-  if (loading) return <div className="explore-loading">Loading books...</div>;
+  if (loading) return <div className="container">Loading...</div>;
 
   return (
-    <div className="explore-page-container">
+    <div className="container">
       <header className="explore-header">
         <h1>Explore Library</h1>
         <div className="header-divider"></div>
@@ -67,7 +57,7 @@ const Explore = () => {
         <div className="search-input-wrapper">
           <input 
             type="text" 
-            placeholder="Search by book name or author..." 
+            placeholder="Search books or authors..." 
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="search-bar-input"
@@ -75,45 +65,31 @@ const Explore = () => {
           <span className="search-icon">🔍</span>
         </div>
 
-        {/* Custom Dropdown Replacement */}
-        <div className="category-filter-wrapper">
-          <div className="custom-select-container">
-            <div 
-              className={`selected-display ${isOpen ? 'active' : ''}`} 
-              onClick={() => setIsOpen(!isOpen)}
-            >
-              <span>{selectedCategory}</span>
-              <span className={`arrow ${isOpen ? 'open' : ''}`}>▼</span>
-            </div>
-
-            {isOpen && (
-              <div className="custom-options-list">
-                {categories.map(cat => (
-                  <div 
-                    key={cat} 
-                    className={`custom-option ${selectedCategory === cat ? 'selected' : ''}`}
-                    onClick={() => {
-                      setSelectedCategory(cat);
-                      setIsOpen(false);
-                    }}
-                  >
-                    {cat}
-                  </div>
-                ))}
-              </div>
-            )}
+        <div className="custom-select-container">
+          <div className={`selected-display ${isOpen ? 'active' : ''}`} onClick={() => setIsOpen(!isOpen)}>
+            <span>{selectedCategory}</span>
+            <span className={`arrow ${isOpen ? 'open' : ''}`}>▼</span>
           </div>
+          {isOpen && (
+            <div className="custom-options-list">
+              {categories.map(cat => (
+                <div key={cat} className="custom-option" onClick={() => { setSelectedCategory(cat); setIsOpen(false); }}>
+                  {cat}
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
-      <div className="explore-books-grid">
+      <div className="books-grid explore-grid">
         {filteredBooks.length > 0 ? (
           filteredBooks.map(book => (
-            <Link to={`/book/${book._id}`} key={book._id} className="explore-book-card">
-              <div className="book-cover-mini">
+            <Link to={`/book/${book._id}`} key={book._id} className="book-card explore-card">
+              <div className="book-cover">
                 <img src={book.coverImage} alt={book.name} />
               </div>
-              <div className="explore-book-info">
+              <div className="book-info">
                 <h3>{book.name}</h3>
                 <p>{book.author}</p>
                 <span className="category-tag">{book.category?.name || "General"}</span>
@@ -121,11 +97,14 @@ const Explore = () => {
             </Link>
           ))
         ) : (
-          <div className="no-results">
-            <p>No books found matching your search.</p>
+          <div className="no-results-box">
+            <p>We couldn't find "{searchTerm}"</p>
+            <button className="btn-cta" onClick={() => setShowModal(true)}>+ Add This Book</button>
           </div>
         )}
       </div>
+
+      <AddBookModal isOpen={showModal} onClose={() => setShowModal(false)} />
     </div>
   );
 };

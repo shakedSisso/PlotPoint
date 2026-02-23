@@ -1,17 +1,11 @@
-.explore-page-container {
-  max-width: 1300px; /* Wider container to fit 4 large cards */
-  margin: 0 auto;
-  padding: 2rem 1rem;
-}
-
+/* --- Header Sync --- */
 .explore-header {
-  margin-bottom: 3rem;
   text-align: center;
+  margin-bottom: 3rem;
 }
 
 .explore-header h1 {
   font-size: 2.8rem;
-  color: var(--coffee);
   margin-bottom: 0.5rem;
 }
 
@@ -23,7 +17,7 @@
   border-radius: 2px;
 }
 
-/* ---------------- SEARCH & FILTER ---------------- */
+/* --- Search & Filter --- */
 .search-filter-area {
   display: flex;
   gap: 1.5rem;
@@ -40,214 +34,117 @@
 
 .search-bar-input {
   width: 100%;
-  padding: 1rem 1.2rem 1rem 3rem;
-  border-radius: 12px;
+  padding: 0.8rem 1rem 0.8rem 2.5rem;
+  border-radius: 8px;
   border: 1px solid var(--sand);
-  background: var(--white);
-  font-size: 1rem;
   outline: none;
-  color: var(--coffee);
-}
-
-.search-bar-input:focus {
-  border-color: var(--terracotta);
-  box-shadow: 0 0 0 3px rgba(183, 116, 102, 0.1);
 }
 
 .search-icon {
   position: absolute;
-  left: 1.2rem;
+  left: 1rem;
   top: 50%;
   transform: translateY(-50%);
-  font-size: 1.1rem;
-  opacity: 0.6;
+  opacity: 0.5;
 }
 
-.category-dropdown {
-  padding: 1rem 1.5rem;
-  border-radius: 12px;
-  border: 1px solid var(--sand);
-  background: var(--white);
-  color: var(--coffee);
-  font-weight: 600;
-  cursor: pointer;
-}
-
-/* ---------------- 4-COLUMN BOOKS GRID ---------------- */
-.explore-books-grid {
-  display: grid;
-  /* Forces exactly 4 columns */
-  grid-template-columns: repeat(4, 1fr); 
-  gap: 2rem;
-}
-
-.explore-book-card {
-  background: var(--white);
-  border: 1px solid var(--sand);
-  border-radius: 15px;
-  text-decoration: none;
-  color: var(--coffee);
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  transition: all 0.3s ease;
-  /* Adjusting height for 4-column layout */
-  height: 420px; 
-}
-
-.explore-book-card:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 15px 30px rgba(149, 124, 98, 0.2);
-  border-color: var(--terracotta);
-}
-
-/* THE BOOK COVER (2/3 Ratio) */
-.book-cover-mini {
-  height: 66.6%; /* 2/3 Cover */
-  /* שאר ההגדרות הישנות (רקע, פונט) יכולות להישאר כגיבוי */
-  background: var(--terracotta);
-  color: var(--cream);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 5rem;
-  font-weight: 800;
-  
-  /* תוספת חשובה: */
-  overflow: hidden; /* מוודא ששום דבר לא בורח החוצה */
-  padding: 0; /* איפוס ריפוד אם היה */
-}
-
-.book-cover-mini img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover; 
-  display: block; /* מונע רווחים קטנים מעצבנים בתחתית תמונות */
-}
-/* THE INFO AREA (1/3 Ratio) */
-.explore-book-info {
-  height: 33.4%;
-  padding: 1.2rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-}
-
-.explore-book-info h3 {
-  font-size: 1.15rem;
-  margin: 0 0 0.3rem 0;
-  color: var(--coffee);
-  line-height: 1.2;
-}
-
-.explore-book-info p {
-  font-size: 0.9rem;
-  margin: 0 0 0.8rem 0;
-  opacity: 0.7;
-}
-
-.category-tag {
-  font-size: 0.7rem;
-  background: var(--cream);
-  color: var(--terracotta);
-  padding: 3px 10px;
-  border-radius: 15px;
-  font-weight: 700;
-  letter-spacing: 0.5px;
-}
-
-/* Responsive: switches to 2 columns on small tablets and 1 on mobile */
-@media (max-width: 1024px) {
-  .explore-books-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 600px) {
-  .explore-books-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-/* --- FILTER AREA LAYOUT --- */
-.search-filter-area {
-  display: flex;
-  gap: 1.5rem;
-  margin-bottom: 4rem;
-  justify-content: center;
-  align-items: center;
-}
-
-/* --- CUSTOM DROPDOWN --- */
+/* --- Custom Dropdown --- */
 .custom-select-container {
   position: relative;
-  width: 220px;
-  user-select: none;
-  z-index: 100;
+  width: 200px;
+  z-index: 10;
 }
 
 .selected-display {
-  padding: 0.8rem 1.2rem;
+  padding: 0.8rem 1rem;
   background: var(--cream);
   border: 1px solid var(--sand);
-  border-radius: 12px;
+  border-radius: 8px;
+  cursor: pointer;
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  cursor: pointer;
-  color: var(--coffee);
   font-weight: 600;
-  transition: all 0.2s ease;
-}
-
-.selected-display.active {
-  border-color: var(--terracotta);
-  box-shadow: 0 4px 12px rgba(183, 116, 102, 0.1);
-}
-
-.arrow {
-  font-size: 0.7rem;
-  color: var(--terracotta);
-  transition: transform 0.3s ease;
-}
-
-.arrow.open {
-  transform: rotate(180deg);
 }
 
 .custom-options-list {
   position: absolute;
   top: 110%;
-  left: 0;
   width: 100%;
-  background: var(--cream);
+  background: white;
   border: 1px solid var(--sand);
-  border-radius: 12px;
-  box-shadow: 0 10px 25px rgba(149, 124, 98, 0.15);
+  border-radius: 8px;
   overflow: hidden;
-  animation: fadeIn 0.2s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .custom-option {
-  padding: 0.8rem 1.2rem;
-  color: var(--coffee);
+  padding: 0.8rem;
   cursor: pointer;
-  transition: background 0.2s ease;
+  transition: 0.2s;
 }
 
 .custom-option:hover {
-  background-color: #eedec2;
+  background: var(--buttercream);
   color: var(--terracotta);
 }
 
-.custom-option.selected {
-  background-color: #eedec2;
-  font-weight: 700;
+/* --- 4-Column Layout Override --- */
+.explore-grid {
+  grid-template-columns: repeat(4, 1fr) !important;
+  gap: 25px;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-5px); }
-  to { opacity: 1; transform: translateY(0); }
+/* --- 2/3 and 1/3 Card Ratio --- */
+.explore-card {
+  height: 450px;
+  display: flex;
+  flex-direction: column;
+  background: white;
+  border-radius: 12px;
+  border: 1px solid var(--sand);
+  overflow: hidden;
+}
+
+.explore-card .book-cover {
+  height: 66.6% !important;
+  border-radius: 0;
+  margin-bottom: 0;
+  box-shadow: none;
+  background: var(--terracotta);
+}
+
+.explore-card .book-info {
+  height: 33.4%;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+/* --- Empty Result State --- */
+.no-results-box {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 4rem;
+  border: 2px dashed var(--sand);
+  border-radius: 15px;
+}
+
+.no-results-box p {
+  font-size: 1.2rem;
+  margin-bottom: 1.5rem;
+}
+
+@media (max-width: 900px) {
+  .explore-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+@media (max-width: 500px) {
+  .explore-grid {
+    grid-template-columns: 1fr !important;
+  }
 }
