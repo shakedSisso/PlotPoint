@@ -91,3 +91,59 @@ export async function getBookById(req, res) {
         res.status(500).json({ success: false, error: "Server error" });
     }
 }
+
+function escapeRegex(str) {
+    return String(str).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+export async function addByIsbn(req, res) {
+    try {
+        const { name, author, coverImage, length, categoryName } = req.body;
+
+        if (!name || !author) {
+            return res.status(400).json({ success: false, message: "name and author are required" });
+        }
+
+        const existingBook = await Book.findOne({
+            name: { $regex: new RegExp(`^${escapeRegex(name)}$`, "i") },
+            author: { $regex: new RegExp(`^${escapeRegex(author)}$`, "i") },
+        });
+
+        if (existingBook) {
+            return res.status(409).json({
+                success: false,
+                message: "Book already exists",
+                bookId: existingBook._id,
+            });
+        }
+
+        const safeCategoryName = (categoryName && String(categoryName).trim()) || "General";
+
+        let category = await Category.findOne({
+            name: { $regex: new RegExp(`^${escapeRegex(safeCategoryName)}$`, "i") },
+        });
+
+        if (!category) {
+            category = await Category.create({ name: safeCategoryName });
+        }
+
+        const normalizedLength =
+            typeof length === "number"
+                ? length
+                : parseInt(String(length).match(/\d+/)?.[0] || "0", 10);
+
+        const newBook = await Book.create({
+            name: String(name).trim(),
+            author: String(author).trim(),
+            coverImage: coverImage || "",
+            length: normalizedLength,
+            category: category._id,
+            isUserAdded: true, // אם זו הכוונה שלך כשמוסיפים ידנית
+        });
+
+        return res.status(201).json({ success: true, book: newBook });
+    } catch (err) {
+        console.error("Critical Backend Error:", err);
+        return res.status(500).json({ success: false, message: err.message });
+    }
+}
