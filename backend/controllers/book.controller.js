@@ -96,17 +96,39 @@ function escapeRegex(str) {
     return String(str).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
+const normalizeCover = (coverImage, isbn) => {
+    const safeIsbn = String(isbn || "").trim();
+    let url = typeof coverImage === "string" ? coverImage.trim() : "";
+
+    const fallback = safeIsbn
+        ? `https://covers.openlibrary.org/b/isbn/${encodeURIComponent(safeIsbn)}-L.jpg`
+        : "";
+
+    if (!url) return fallback;
+
+    url = url.replace(/^http:\/\//i, "https://");
+
+    if (url.includes("books.google.com/books/content")) {
+        return fallback;
+    }
+
+    return url;
+};
+
 export async function addByIsbn(req, res) {
     try {
-        const { name, author, coverImage, length, categoryName } = req.body;
+        const { isbn, name, author, coverImage, length, categoryName } = req.body;
 
-        if (!name || !author) {
-            return res.status(400).json({ success: false, message: "name and author are required" });
+        if (!isbn || !name || !author) {
+            return res
+                .status(400)
+                .json({ success: false, message: "isbn, name and author are required" });
         }
 
+        // 1) Dup check
         const existingBook = await Book.findOne({
-            name: { $regex: new RegExp(`^${escapeRegex(name)}$`, "i") },
-            author: { $regex: new RegExp(`^${escapeRegex(author)}$`, "i") },
+            name: { $regex: new RegExp(`^${escapeRegex(String(name))}$`, "i") },
+            author: { $regex: new RegExp(`^${escapeRegex(String(author))}$`, "i") },
         });
 
         if (existingBook) {
@@ -117,6 +139,7 @@ export async function addByIsbn(req, res) {
             });
         }
 
+        // 2) Category
         const safeCategoryName = (categoryName && String(categoryName).trim()) || "General";
 
         let category = await Category.findOne({
@@ -127,18 +150,23 @@ export async function addByIsbn(req, res) {
             category = await Category.create({ name: safeCategoryName });
         }
 
+        // 3) Normalize fields
         const normalizedLength =
             typeof length === "number"
                 ? length
                 : parseInt(String(length).match(/\d+/)?.[0] || "0", 10);
 
+        const finalCover = normalizeCover(coverImage, isbn);
+
+        // 4) Create
         const newBook = await Book.create({
+            isbn: String(isbn).trim(),
             name: String(name).trim(),
             author: String(author).trim(),
-            coverImage: coverImage || "",
+            coverImage: finalCover,
             length: normalizedLength,
             category: category._id,
-            isUserAdded: true, // אם זו הכוונה שלך כשמוסיפים ידנית
+            isUserAdded: true,
         });
 
         return res.status(201).json({ success: true, book: newBook });
@@ -147,3 +175,4 @@ export async function addByIsbn(req, res) {
         return res.status(500).json({ success: false, message: err.message });
     }
 }
+
