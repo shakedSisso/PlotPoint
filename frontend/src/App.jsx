@@ -5,6 +5,7 @@ import Register from './pages/Register';
 import Profile from './pages/Profile';
 import ShelfView from './pages/ShelfView';
 import BookDetail from './pages/BookDetail';
+import Explore from './pages/Explore'; 
 import logo from './assets/logo.png';
 import api from './utils/api';
 import './App.css';
@@ -62,6 +63,7 @@ function App() {
             <Route path="/profile" element={user ? <Profile user={user} /> : <Navigate to="/login" />} />
             <Route path="/shelf/:shelfName" element={user ? <ShelfView user={user} /> : <Navigate to="/login" />} />
             <Route path="/book/:bookId" element={user ? <BookDetail user={user} /> : <Navigate to="/login" />} />
+            <Route path="/explore" element={<Explore />} />
           </Routes>
         </main>
 
