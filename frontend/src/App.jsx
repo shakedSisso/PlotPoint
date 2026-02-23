@@ -8,6 +8,7 @@ import BookDetail from './pages/BookDetail';
 import logo from './assets/logo.png';
 import api from './utils/api';
 import './App.css';
+import NotFound from './pages/NotFound';
 
 function App() {
   const [user, setUser] = useState(JSON.parse(localStorage.getItem('user')));
@@ -61,6 +62,8 @@ function App() {
             <Route path="/profile" element={user ? <Profile user={user} /> : <Navigate to="/login" />} />
             <Route path="/shelf/:shelfName" element={user ? <ShelfView user={user} /> : <Navigate to="/login" />} />
             <Route path="/book/:bookId" element={user ? <BookDetail user={user} /> : <Navigate to="/login" />} />
+
+            <Route path="/not-found" element={<NotFound />} />
           </Routes>
         </main>
 
