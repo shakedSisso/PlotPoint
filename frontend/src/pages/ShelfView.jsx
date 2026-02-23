@@ -14,6 +14,7 @@ const ShelfView = () => {
         setBooks(res.data.books);
       } catch (err) {
         console.error(err);
+        window.location.href = '/not-found';
       }
     };
     fetchBooks();
@@ -108,7 +109,12 @@ const ShelfView = () => {
             </Link>
           );
         }) : (
-          <p className="empty-message">No books in this shelf yet.</p>
+          <div className="empty-message">
+            <p>This shelf is currently empty.</p>
+            <Link to="/explore" className="btn-cta">
+              Explore Books
+            </Link>
+          </div>
         )}
       </div>
     </div>
