@@ -6,7 +6,9 @@
   --cream: #FAF7F2;
 }
 
-* { box-sizing: border-box; }
+* {
+  box-sizing: border-box;
+}
 
 body {
   margin: 0;
@@ -120,6 +122,10 @@ body {
   text-decoration: none;
   color: inherit;
   transition: 0.2s;
+  background: white;
+  border-radius: 12px;
+  border: 1px solid var(--sand);
+  overflow: hidden;
 }
 
 .book-card:hover {
@@ -134,7 +140,7 @@ body {
   align-items: center;
   justify-content: center;
   font-size: 3rem;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
   margin-bottom: 10px;
 }
 
@@ -171,7 +177,8 @@ body {
     gap: 12px;
   }
 
-  .nav-links a, .logout-btn {
+  .nav-links a,
+  .logout-btn {
     font-size: 0.9rem;
   }
 

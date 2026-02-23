@@ -5,6 +5,7 @@ import Register from './pages/Register';
 import Profile from './pages/Profile';
 import ShelfView from './pages/ShelfView';
 import BookDetail from './pages/BookDetail';
+import Explore from './pages/Explore';
 import logo from './assets/logo.png';
 import api from './utils/api';
 import './App.css';
@@ -20,7 +21,7 @@ function App() {
 
   const fetchBooks = async () => {
     try {
-      const res = await api.get('/books'); 
+      const res = await api.get('/books');
       setBooks(res.data);
     } catch (err) {
       console.error(err);
@@ -36,14 +37,15 @@ function App() {
             <span className="logo-text">PlotPoint</span>
           </Link>
           <div className="nav-links">
+            <Link to="/explore" className="nav-item">Explore</Link>
             {user ? (
               <>
+                <Link to="/profile">Profile</Link>
                 <button className="logout-btn" onClick={() => {
                   localStorage.removeItem('user');
                   setUser(null);
                   window.location.href = '/login';
                 }}>Logout</button>
-                <Link to="/profile">Profile</Link>
               </>
             ) : (
               <>
@@ -58,10 +60,11 @@ function App() {
           <Routes>
             <Route path="/" element={<Home books={books} />} />
             <Route path="/login" element={<Login setUser={setUser} />} />
-            <Route path="/register" element={<Register setUser={setUser}/>} />
+            <Route path="/register" element={<Register setUser={setUser} />} />
             <Route path="/profile" element={user ? <Profile user={user} /> : <Navigate to="/login" />} />
             <Route path="/shelf/:shelfName" element={user ? <ShelfView user={user} /> : <Navigate to="/login" />} />
             <Route path="/book/:bookId" element={user ? <BookDetail user={user} /> : <Navigate to="/login" />} />
+            <Route path="/explore" element={<Explore />} />
 
             <Route path="/not-found" element={<NotFound />} />
           </Routes>
@@ -88,18 +91,30 @@ const Home = ({ books }) => {
   return (
     <div className="home-page">
       <div className="home-hero">
-        <h1>Your Library, <span style={{color:'var(--terracotta)'}}>Digitized.</span></h1>
+        <h1>Your Library, <span style={{ color: 'var(--terracotta)' }}>Digitized.</span></h1>
         <p>Organize shelves, track progress, and read together.</p>
       </div>
 
       <div className="categories-list">
         {Object.keys(groupedBooks).map(category => (
           <div key={category} className="home-category-section">
-            <h2 className="category-label">{category}</h2>
+            <div className="category-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '15px' }}>
+              <h2 className="category-label" style={{ margin: 0 }}>{category}</h2>
+              <Link
+                to={`/explore?category=${encodeURIComponent(category)}`}
+                className="see-more-link"
+                style={{ color: 'var(--terracotta)', fontWeight: '600', textDecoration: 'none' }}
+              >
+                See more →
+              </Link>
+            </div>
+
             <div className="books-grid">
-              {groupedBooks[category].map(book => (
+              {groupedBooks[category].slice(0, 6).map(book => (
                 <Link to={`/book/${book._id}`} key={book._id} className="book-card">
-                  <div className="book-cover"><img src={book.coverImage} alt="📚" /></div>
+                  <div className="book-cover">
+                    <img src={book.coverImage} alt={book.name} />
+                  </div>
                   <div className="book-info">
                     <h3>{book.name}</h3>
                     <p>{book.author}</p>
