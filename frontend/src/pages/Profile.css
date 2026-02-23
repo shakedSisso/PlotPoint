@@ -200,3 +200,58 @@
 .btn-secondary:hover {
   background: var(--cream);
 }
+
+
+.shelf-card.no-hover {
+    cursor: default;
+    transform: none !important;
+    box-shadow: 0 2px 8px rgba(149, 124, 98, 0.1);
+    border-style: dashed;
+    border-width: 2px;
+}
+
+.buddy-dates-container {
+    background-color: rgba(245, 241, 233, 0.5);
+    border-radius: 6px;
+    margin: 0.5rem 0;
+    border-top: 1px solid var(--sand);
+    border-bottom: 1px solid var(--sand);
+}
+
+.buddy-date-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 4px 0;
+}
+
+.buddy-date-label {
+    font-weight: 700;
+    font-size: 0.8rem;
+    color: var(--coffee);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.buddy-date-value {
+    font-size: 0.9rem;
+    color: var(--terracotta);
+    font-family: monospace;
+}
+
+.buddy-icon-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 0;
+    opacity: 0.7;
+}
+
+.buddy-status-badge {
+    background-color: var(--terracotta);
+    color: var(--cream);
+    font-size: 0.7rem;
+    font-weight: bold;
+    padding: 2px 8px;
+    border-radius: 12px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
