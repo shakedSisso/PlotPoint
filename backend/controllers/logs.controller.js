@@ -52,35 +52,35 @@ export async function ReviewCreate(req, res) {
     try {
         const payload = { ...req.body, userID: req.user.id };
         const data = CreateReviews.parse(payload);
-        
-        // Check if the user has already submitted a review for this book
+
         const existingReview = await Review.findOne({
-            userID: req.user.id,
+            userID: data.userID,
             bookID: data.bookID
         });
 
         if (existingReview) {
             return res.status(409).json({
                 success: false,
-                error: "You have already reviewed this book. You can update your existing review instead."
+                error: "You have already reviewed this book."
             });
         }
 
-        // Create the new review with rating and text
         const review = await Review.create({
-            userID: req.user.id,
+            userID: data.userID,
             bookID: data.bookID,
             rating: data.rating,
             text: data.text
         });
+
         res.status(201).json({ success: true, review });
     }
     catch (err) {
-        if (err.name === 'ZodError') {
+        if (err.name === 'ZodError' && Array.isArray(err.errors)) {
             const errors = err.errors.map(e => e.message);
             return res.status(400).json({ success: false, errors });
         }
-        console.log(err);
+
+        console.error("ReviewCreate Error:", err);
         res.status(500).json({ success: false, error: "Server error" });
     }
 }
@@ -100,6 +100,21 @@ export async function GetBookReviews(req, res) {
         console.log(err);
         res.status(500).json({ success: false, error: "Server error" });
     }
+}
+
+export async function getMyReview(req, res) {
+  try {
+    const { bookId } = req.params;
+        const review = await Review.findOne({ 
+      bookID: bookId, 
+      userID: req.user.id 
+    });
+
+    res.status(200).json({ success: true, review: review || null });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, error: "Server error" });
+  }
 }
 
 
