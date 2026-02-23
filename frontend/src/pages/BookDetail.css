@@ -7,180 +7,179 @@
 .back-link {
   text-decoration: none;
   color: var(--terracotta);
-  font-weight: 600;
-  display: block;
-  margin-bottom: 1rem;
-}
-
-/* Header Styling */
-.book-detail-header {
+  font-weight: 700;
+  display: inline-block;
   margin-bottom: 2rem;
 }
 
-.book-detail-header h1 {
-  font-size: 2.5rem;
-  color: var(--coffee);
-  margin-bottom: 0.5rem;
-}
-
-.header-divider {
-  height: 4px;
-  width: 80px;
-  background: var(--terracotta);
-  border-radius: 2px;
-}
-
-/* Upper Layout: Cover Left, Meta Right */
 .book-upper-layout {
   display: flex;
-  gap: 3rem;
-  margin-bottom: 3rem;
+  gap: 3.5rem;
   align-items: flex-start;
+  margin-bottom: 4rem;
 }
 
 .book-cover-large {
   width: 240px;
   height: 340px;
-  background: var(--terracotta);
-  color: var(--cream);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 6rem;
-  font-weight: 800;
-  border-radius: 8px;
+  object-fit: cover;
+  border-radius: 12px;
   box-shadow: 15px 15px 30px rgba(0,0,0,0.1);
 }
 
 .book-metadata-side {
   flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  padding-top: 1rem;
 }
 
-.meta-group label {
-  display: block;
-  font-size: 0.8rem;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  color: var(--terracotta);
-  font-weight: 700;
-  margin-bottom: 0.2rem;
-}
-
-.meta-group p {
-  font-size: 1.4rem;
+.book-detail-header h1 {
+  font-size: 2.8rem;
   color: var(--coffee);
   margin: 0;
+}
+
+.author-text {
+  font-size: 1.4rem;
   font-weight: 500;
-}
-
-/* Middle Section: Centered Progress & Buddy Read */
-.middle-interaction-area {
-  max-width: 600px;
-  margin: 0 auto 4rem auto;
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
-.progress-section-card, .buddy-feature-card {
-  background: var(--white);
-  padding: 2rem;
-  border-radius: 12px;
-  border: 1px solid var(--sand);
-  text-align: center;
-}
-
-/* Progress Bar in Detail View */
-.detail-progress-bar-bg {
-  width: 100%;
-  height: 24px;
-  background: var(--cream);
-  border-radius: 12px;
-  position: relative;
-  overflow: hidden;
-  margin: 1rem 0;
-  border: 1px solid var(--sand);
-}
-
-.detail-progress-fill {
-  height: 100%;
-  background: var(--terracotta);
-  transition: width 0.5s ease;
-}
-
-.progress-label {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 0.85rem;
-  font-weight: 800;
   color: var(--coffee);
-  z-index: 2;
+  margin-top: 5px;
 }
 
-/* Buddy Read Feature */
-.buddy-feature-card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
-  background: var(--cream);
-  border: 2px dashed var(--terracotta);
+.page-count-small {
+  font-size: 0.9rem;
+  color: #888;
+  margin-top: 2px;
 }
 
-.btn-buddy-cta {
+.status-container {
+  margin: 2rem 0;
+}
+
+.btn-add-to-shelf {
   background: var(--terracotta);
-  color: var(--white);
+  color: white;
   border: none;
-  padding: 0.8rem 2rem;
+  padding: 0.8rem 1.8rem;
   border-radius: 25px;
   font-weight: 700;
   cursor: pointer;
-  transition: opacity 0.2s;
 }
 
-.btn-buddy-cta:hover {
-  opacity: 0.9;
-}
-
-/* Logs Section */
-.logs-container h3 {
-  border-bottom: 2px solid var(--sand);
-  padding-bottom: 0.5rem;
-  margin-bottom: 1.5rem;
-}
-
-.log-entry-item {
-  background: var(--white);
-  padding: 1.5rem;
+.primary-select {
+  padding: 10px 15px;
   border-radius: 8px;
+  border: 2px solid var(--sand);
+  background: white;
+  font-weight: 600;
+  width: 250px;
   margin-bottom: 1rem;
-  border-left: 5px solid var(--terracotta);
-  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
 }
 
-.log-header {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 0.5rem;
+/* Progress & Rating Displays */
+.progress-bar-bg {
+  width: 250px;
+  height: 8px;
+  background: #eee;
+  border-radius: 4px;
+  overflow: hidden;
 }
 
-.log-page {
-  font-weight: 700;
-  color: var(--terracotta);
+.progress-bar-fill {
+  height: 100%;
+  background: var(--terracotta);
 }
 
-.log-date {
+.progress-text {
   font-size: 0.8rem;
-  opacity: 0.6;
+  font-weight: 600;
+  display: block;
+  margin-top: 5px;
 }
 
-.log-note {
-  margin: 0;
-  line-height: 1.5;
+.stars {
+  color: #f1c40f;
+  font-size: 1.2rem;
+  margin-left: 10px;
+}
+
+.btn-create-review {
+  background: none;
+  border: 1px dashed var(--terracotta);
+  color: var(--terracotta);
+  padding: 8px 15px;
+  border-radius: 5px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* Modal Styling */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.review-modal {
+  background: white;
+  padding: 2.5rem;
+  border-radius: 15px;
+  width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.rating-input {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+.star-input {
+  font-size: 2rem;
+  cursor: pointer;
+  color: #ddd;
+}
+
+.star-input.filled {
+  color: #f1c40f;
+}
+
+.review-modal textarea {
+  height: 120px;
+  padding: 10px;
+  border: 1px solid var(--sand);
+  border-radius: 8px;
+  resize: none;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+/* Custom Shelves */
+.add-custom-trigger {
+  background: none;
+  border: none;
+  color: var(--terracotta);
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.custom-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 1rem;
+  padding: 1rem;
+  background: var(--cream);
+  border-radius: 8px;
 }
