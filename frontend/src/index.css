@@ -138,6 +138,11 @@ body {
   margin-bottom: 10px;
 }
 
+.book-cover img {
+  width: auto;
+  height: 100%;
+}
+
 .book-info h3 {
   margin: 0;
   font-size: 1rem;
