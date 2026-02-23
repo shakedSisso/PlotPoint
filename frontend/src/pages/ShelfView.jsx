@@ -14,6 +14,7 @@ const ShelfView = () => {
         setBooks(res.data.books);
       } catch (err) {
         console.error(err);
+        window.location.href = '/not-found';
       }
     };
     fetchBooks();
