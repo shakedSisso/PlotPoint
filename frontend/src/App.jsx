@@ -99,7 +99,7 @@ const Home = ({ books }) => {
             <div className="books-grid">
               {groupedBooks[category].map(book => (
                 <Link to={`/book/${book._id}`} key={book._id} className="book-card">
-                  <div className="book-cover">📚</div>
+                  <div className="book-cover"><img src={book.coverImage} alt="📚" /></div>
                   <div className="book-info">
                     <h3>{book.name}</h3>
                     <p>{book.author}</p>
