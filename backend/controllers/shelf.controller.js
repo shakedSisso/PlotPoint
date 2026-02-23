@@ -262,7 +262,7 @@ export async function updateShelf(req, res) {
         const shelf = await Shelf.findOneAndUpdate(
             { _id: shelfId, userId: req.user.id },
             req.body,
-            { new: true }
+            { returnDocument: 'after' }
         );
         if (!shelf) return res.status(404).json({ success: false, error: "Shelf not found" });
         res.status(200).json({ success: true, shelf });
@@ -284,6 +284,53 @@ export async function getBookStatus(req, res) {
         res.status(200).json({ success: true, entry });
     } catch (err) {
         console.error("Error in getBookStatus:", err);
+        res.status(500).json({ success: false, error: "Server error" });
+    }
+}
+
+export async function getMyShelfEntries(req, res) {
+    try {
+        const shelves = await Shelf.find({ userId: req.user.id });
+        const shelfIds = shelves.map(s => s._id);
+
+        const entries = await BookInShelf.find({
+            shelfId: { $in: shelfIds }
+        }).populate('shelfId');
+
+        res.status(200).json({ success: true, entries });
+    } catch (err) {
+        res.status(500).json({ success: false, error: "Server error" });
+    }
+}
+
+export async function updateBookShelf(req, res) {
+    try {
+        const { bookID, oldShelfID, newShelfID } = req.body;
+
+        if (!bookID || !oldShelfID || !newShelfID) {
+            return res.status(400).json({ success: false, error: "Missing required fields" });
+        }
+
+        // Update the entry that matches both the book and the specific old shelf
+        const updatedEntry = await BookInShelf.findOneAndUpdate(
+            { 
+                bookId: bookID, 
+                shelfId: oldShelfID 
+            },
+            { shelfId: newShelfID },
+            { returnDocument: 'after' }
+        ).populate('shelfId');
+
+        if (!updatedEntry) {
+            return res.status(404).json({ 
+                success: false, 
+                error: "The book was not found on the specified old shelf." 
+            });
+        }
+
+        res.status(200).json({ success: true, entry: updatedEntry });
+    } catch (err) {
+        console.error("Update error:", err);
         res.status(500).json({ success: false, error: "Server error" });
     }
 }
