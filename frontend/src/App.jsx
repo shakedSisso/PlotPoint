@@ -6,6 +6,7 @@ import Profile from './pages/Profile';
 import ShelfView from './pages/ShelfView';
 import BookDetail from './pages/BookDetail';
 import Explore from './pages/Explore';
+import BuddyReadPage from './pages/BuddyReadPage';
 import logo from './assets/logo.png';
 import api from './utils/api';
 import './App.css';
@@ -66,6 +67,8 @@ function App() {
             <Route path="/book/:bookId" element={user ? <BookDetail user={user} /> : <Navigate to="/login" />} />
             <Route path="/explore" element={<Explore />} />
 
+            <Route path="/buddy-read/:id" element={user ? <BuddyReadPage /> : <Navigate to="/login" />} />
+            
             <Route path="/not-found" element={<NotFound />} />
           </Routes>
         </main>

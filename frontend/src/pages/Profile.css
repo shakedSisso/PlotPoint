@@ -22,17 +22,17 @@
 .btn-cta {
   white-space: nowrap;
   color: var(--cream) !important;
+  background-color: var(--terracotta);
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: opacity 0.2s;
 }
 
-.create-shelf-form {
-  display: flex;
-  gap: 10px;
-}
-
-.create-shelf-form input {
-  padding: 8px 12px;
-  border: 1px solid var(--sand);
-  border-radius: 4px;
+.btn-cta:hover {
+  opacity: 0.9;
 }
 
 .shelf-grid {
@@ -54,10 +54,19 @@
   color: var(--coffee);
 }
 
+.shelf-card.buddy-card {
+  border-style: dashed;
+  border-width: 2px;
+}
+
 .shelf-card:hover {
   transform: translateY(-4px);
   border-color: var(--terracotta);
   box-shadow: 0 4px 12px rgba(149, 124, 98, 0.15);
+}
+
+.shelf-card.buddy-card:hover {
+  border-style: dashed;
 }
 
 .shelf-card-header {
@@ -91,10 +100,8 @@
   font-weight: 800;
   font-size: 1.2rem;
   border-radius: 3px 6px 6px 3px;
-  /* Book spine effect */
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
   border-left: 3px solid rgba(0, 0, 0, 0.15);
-  /* Adds a binding shadow */
   transition: transform 0.2s;
 }
 
@@ -114,6 +121,35 @@
   background: var(--cream);
   padding: 3px 8px;
   border-radius: 10px;
+  color: var(--coffee);
+}
+
+.buddy-dates-container {
+  background-color: rgba(245, 241, 233, 0.5);
+  border-radius: 6px;
+  margin: 0.5rem 0;
+  border-top: 1px solid var(--sand);
+  border-bottom: 1px solid var(--sand);
+  padding: 0.75rem;
+}
+
+.buddy-date-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 4px 0;
+}
+
+.buddy-date-label {
+  font-weight: 700;
+  font-size: 0.8rem;
+  color: var(--coffee);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.buddy-date-value {
+  font-size: 0.9rem;
+  color: var(--terracotta);
 }
 
 .modal-overlay {
@@ -136,7 +172,7 @@
   border-radius: 16px;
   width: 90%;
   max-width: 420px;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
   border: 1px solid var(--sand);
 }
 
@@ -168,15 +204,6 @@
   border-radius: 8px;
   background-color: var(--cream);
   color: var(--coffee);
-  font-size: 1rem;
-  transition: border-color 0.2s, box-shadow 0.2s;
-}
-
-.modal-content input:focus,
-.modal-content select:focus {
-  outline: none;
-  border-color: var(--terracotta);
-  box-shadow: 0 0 0 3px rgba(183, 116, 102, 0.1);
 }
 
 .modal-actions {
@@ -194,64 +221,4 @@
   border-radius: 8px;
   cursor: pointer;
   font-weight: 600;
-  transition: background 0.2s;
-}
-
-.btn-secondary:hover {
-  background: var(--cream);
-}
-
-
-.shelf-card.no-hover {
-    cursor: default;
-    transform: none !important;
-    box-shadow: 0 2px 8px rgba(149, 124, 98, 0.1);
-    border-style: dashed;
-    border-width: 2px;
-}
-
-.buddy-dates-container {
-    background-color: rgba(245, 241, 233, 0.5);
-    border-radius: 6px;
-    margin: 0.5rem 0;
-    border-top: 1px solid var(--sand);
-    border-bottom: 1px solid var(--sand);
-}
-
-.buddy-date-row {
-    display: flex;
-    justify-content: space-between;
-    padding: 4px 0;
-}
-
-.buddy-date-label {
-    font-weight: 700;
-    font-size: 0.8rem;
-    color: var(--coffee);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.buddy-date-value {
-    font-size: 0.9rem;
-    color: var(--terracotta);
-    font-family: monospace;
-}
-
-.buddy-icon-wrapper {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 10px 0;
-    opacity: 0.7;
-}
-
-.buddy-status-badge {
-    background-color: var(--terracotta);
-    color: var(--cream);
-    font-size: 0.7rem;
-    font-weight: bold;
-    padding: 2px 8px;
-    border-radius: 12px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }

@@ -67,7 +67,6 @@ const Profile = ({ user }) => {
         </button>
       </header>
 
-      {/* מדפים - לחיצים */}
       <section className="profile-section">
         <h2 className="section-title">My Shelves</h2>
         <div className="shelf-grid">
@@ -93,7 +92,6 @@ const Profile = ({ user }) => {
         </div>
       </section>
 
-      
       <section className="profile-section" style={{ marginTop: '3rem' }}>
         <h2 className="section-title">Buddy Reads</h2>
         <div className="shelf-grid">
@@ -103,22 +101,23 @@ const Profile = ({ user }) => {
             const endDate = session.endDate ? new Date(session.endDate).toLocaleDateString() : "In Progress";
 
             return (
-              <div key={session._id} className="shelf-card no-hover"> {}
+              <Link to={`/buddy-read/${session._id}`} key={session._id} className="shelf-card buddy-card">
                 <div className="shelf-card-header">
                   <h3 style={{ fontSize: '1.1rem' }}>{bookName}</h3>
                   <span className="shelf-badge" style={{ background: '#E2B59A' , color:'#FAF7F2'}}>Buddy Read</span>
                 </div>
                 
                 <div className="buddy-dates-container" style={{ padding: '1rem', fontSize: '0.9rem', color: '#555' }}>
-                  <div style={{ marginBottom: '5px' }}>
-                    <strong>Started:</strong> {startDate}
+                  <div className="buddy-date-row">
+                    <span className="buddy-date-label">Started:</span>
+                    <span className="buddy-date-value">{startDate}</span>
                   </div>
-                  <div>
-                    <strong>Ends:</strong> {endDate}
+                  <div className="buddy-date-row">
+                    <span className="buddy-date-label">Ends:</span>
+                    <span className="buddy-date-value">{endDate}</span>
                   </div>
                 </div>
-
-              </div>
+              </Link>
             );
           }) : <p className="empty-text">No buddy reads found.</p>}
         </div>
