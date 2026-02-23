@@ -36,8 +36,12 @@
   width: 100%;
   padding: 0.8rem 1rem 0.8rem 2.5rem;
   border-radius: 8px;
-  border: 1px solid var(--sand);
+  /* שינוי צבע הבורדר לטרקוטה */
+  border: 1px solid var(--terracotta);
   outline: none;
+  background: transparent;
+  color: var(--charcoal);
+  /* או הצבע הכהה שלך */
 }
 
 .search-icon {
@@ -45,7 +49,9 @@
   left: 1rem;
   top: 50%;
   transform: translateY(-50%);
-  opacity: 0.5;
+  /* שינוי צבע האייקון שיתאים */
+  color: var(--terracotta);
+  opacity: 0.7;
 }
 
 /* --- Custom Dropdown --- */
@@ -58,12 +64,21 @@
 .selected-display {
   padding: 0.8rem 1rem;
   background: var(--cream);
-  border: 1px solid var(--sand);
+  /* שינוי צבע הבורדר לטרקוטה */
+  border: 1px solid var(--terracotta);
   border-radius: 8px;
   cursor: pointer;
   display: flex;
   justify-content: space-between;
+  align-items: center;
   font-weight: 600;
+  color: var(--charcoal);
+}
+
+/* שינוי צבע החץ הקטן ב-Dropdown */
+.arrow {
+  color: var(--terracotta);
+  font-size: 0.8rem;
 }
 
 .custom-options-list {
@@ -71,7 +86,8 @@
   top: 110%;
   width: 100%;
   background: white;
-  border: 1px solid var(--sand);
+  /* בורדר לרשימה שנפתחת */
+  border: 1px solid var(--terracotta);
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -90,6 +106,8 @@
 
 /* --- 4-Column Layout Override --- */
 .explore-grid {
+  display: grid;
+  /* וודא שיש display grid */
   grid-template-columns: repeat(4, 1fr) !important;
   gap: 25px;
 }
@@ -103,6 +121,11 @@
   border-radius: 12px;
   border: 1px solid var(--sand);
   overflow: hidden;
+  transition: transform 0.3s ease;
+}
+
+.explore-card:hover {
+  transform: translateY(-5px);
 }
 
 .explore-card .book-cover {
@@ -110,7 +133,14 @@
   border-radius: 0;
   margin-bottom: 0;
   box-shadow: none;
-  background: var(--terracotta);
+  background: var(--sand);
+  /* רקע ניטרלי אם אין תמונה */
+}
+
+.explore-card .book-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .explore-card .book-info {
@@ -128,13 +158,10 @@
   grid-column: 1 / -1;
   text-align: center;
   padding: 4rem;
-  border: 2px dashed var(--sand);
+  border: 2px dashed var(--terracotta);
+  /* גם כאן שיניתי לטרקוטה */
   border-radius: 15px;
-}
-
-.no-results-box p {
-  font-size: 1.2rem;
-  margin-bottom: 1.5rem;
+  color: var(--charcoal);
 }
 
 @media (max-width: 900px) {
@@ -147,4 +174,46 @@
   .explore-grid {
     grid-template-columns: 1fr !important;
   }
+
+  .search-filter-area {
+    flex-direction: column;
+  }
+
+  .custom-select-container {
+    width: 100%;
+  }
+}
+
+/* מוודא שהגובה כולל את הפאדינג והבורדר בכל האלמנטים */
+.search-bar-input,
+.selected-display {
+  box-sizing: border-box;
+  /* קריטי ליישור גבהים */
+  height: 45px;
+  /* הגדרת גובה קבוע לשניהם */
+  display: flex;
+  align-items: center;
+}
+
+.search-bar-input {
+  width: 100%;
+  padding: 0 1rem 0 2.5rem;
+  /* הורדנו פאדינג עליון/תחתון כי יש גובה קבוע */
+  border: 1px solid var(--terracotta);
+  border-radius: 8px;
+  outline: none;
+  background: transparent;
+  font-size: 1rem;
+}
+
+.selected-display {
+  padding: 0 1rem;
+  /* רק פאדינג צידי */
+  background: var(--cream);
+  border: 1px solid var(--terracotta);
+  border-radius: 8px;
+  cursor: pointer;
+  justify-content: space-between;
+  font-weight: 600;
+  font-size: 1rem;
 }

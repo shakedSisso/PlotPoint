@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom'; // הוספנו את useSearchParams
 import api from '../utils/api';
 import AddBookModal from './AddBookModal';
 import './Explore.css';
@@ -15,6 +15,10 @@ const Explore = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
+  // חיבור לפרמטרים בכתובת ה-URL
+  const [searchParams] = useSearchParams();
+  const categoryQuery = searchParams.get('category');
+
   useEffect(() => {
     const fetchExploreData = async () => {
       try {
@@ -23,8 +27,14 @@ const Explore = () => {
         const sorted = res.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
         setBooks(sorted);
         setFilteredBooks(sorted);
+
         const uniqueCats = ["All", ...new Set(sorted.map(b => b.category?.name).filter(Boolean))];
         setCategories(uniqueCats);
+
+        // אם הגענו מהדף הראשי עם קטגוריה ב-URL, נעדכן את ה-State
+        if (categoryQuery && uniqueCats.includes(categoryQuery)) {
+          setSelectedCategory(categoryQuery);
+        }
       } catch (err) {
         console.error(err);
       } finally {
@@ -32,12 +42,12 @@ const Explore = () => {
       }
     };
     fetchExploreData();
-  }, []);
+  }, [categoryQuery]); // ה-Effect ירוץ שוב אם הקטגוריה ב-URL משתנה
 
   useEffect(() => {
     const filtered = books.filter(book => {
-      const matchesSearch = book.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                            book.author.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesSearch = book.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        book.author.toLowerCase().includes(searchTerm.toLowerCase());
       const matchesCat = selectedCategory === "All" || book.category?.name === selectedCategory;
       return matchesSearch && matchesCat;
     });
@@ -55,9 +65,9 @@ const Explore = () => {
 
       <section className="search-filter-area">
         <div className="search-input-wrapper">
-          <input 
-            type="text" 
-            placeholder="Search books or authors..." 
+          <input
+            type="text"
+            placeholder="Search books or authors..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="search-bar-input"
