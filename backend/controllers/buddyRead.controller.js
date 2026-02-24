@@ -27,7 +27,7 @@ export async function buddyReadCreation(req, res) {
 
     } catch (err) {
         if (err.name === "ZodError") {
-            const errors = err.errors.map(e => e.message);
+            const errors = JSON.parse(err.message).map(e => e.message);
             return res.status(400).json({ success: false, errors });
         }
         console.log(err);
@@ -54,7 +54,7 @@ export async function shareBuddyRead(req, res) {
 
     } catch (err) {
         if (err.name === "ZodError") {
-            const errors = err.errors.map(e => e.message);
+            const errors = JSON.parse(err.message).map(e => e.message);
             return res.status(400).json({ success: false, errors });
         }
         console.log(err);
