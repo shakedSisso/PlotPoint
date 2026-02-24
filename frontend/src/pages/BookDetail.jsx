@@ -41,7 +41,7 @@ const BookDetail = () => {
         api.get('/shelf/my-entries'),
         api.get(`/logs/reviews/${bookId}`),
         api.get(`/logs/my-review/${bookId}`),
-        api.get(`/logs?bookID=${bookId}`)
+        api.get(`/logs/book-logs/${bookId}`)
       ]);
 
       if (shelfRes.status === 'fulfilled') setUserShelves(shelfRes.value.data.shelves || []);
