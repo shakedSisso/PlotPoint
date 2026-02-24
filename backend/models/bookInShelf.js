@@ -13,11 +13,8 @@ const bookInShelfSchema = new mongoose.Schema({
     },
     progress: {
         type: Number,
-        required: true,
         default: 0
     }
 });
-
-bookInShelfSchema.index({ shelfId: 1, bookId: 1 }, { unique: true });
 
 export const BookInShelf = mongoose.model('BookInShelf', bookInShelfSchema);

@@ -53,6 +53,5 @@ export const CreateLogs = z.object({
 
 export const CreateBookInShelf = z.object({
     bookID: z.string().min(1, "Select book"),
-    shelfID: z.string().min(1, "Select shelf"),
-    progress: z.number().int().nonnegative()
+    shelfID: z.string().min(1, "Select shelf")
 });
