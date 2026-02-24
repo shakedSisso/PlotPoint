@@ -1,5 +1,7 @@
 import { Log } from "../models/logs.model.js";
-import { Review } from "../models/review.model.js"
+import { Review } from "../models/review.model.js";
+import { Book } from "../models/book.model.js"; 
+
 
 import { CreateLogs, CreateReviews } from "../validations/create.schema.js"
 
@@ -8,13 +10,13 @@ import { CreateLogs, CreateReviews } from "../validations/create.schema.js"
 export async function LogsProgress(req, res) {
     try {
         // Merge user ID into payload for Zod validation
-        const payload = { ...req.body, userID: req.user.id };
+        const payload = { ...req.body, userId: req.user.id };
         const data = CreateLogs.parse(payload);
 
         // Save the progress entry to the database
         const log = await Log.create({
-            userID: req.user.id,
-            bookID: data.bookID,
+            userId: req.user.id,
+            bookId: data.bookId,
             currentPage: data.currentPage,
             note: data.note
         });
@@ -32,13 +34,12 @@ export async function LogsProgress(req, res) {
 }
 
 //Retrieves all reading logs for a specific book associated with the logged-in user.
- //Results are sorted by most recent first.
+//Results are sorted by most recent first.
 export async function GetBookLogs(req, res) {
     try {
-        const { bookID } = req.query;
+        const { bookId } = req.query;
         // Query logs matching both user and book constraints
-        const logs = await Log.find({ userId: req.user.id, bookID }).sort({ createdAt: -1 });
-        res.status(200).json({ success: true, logs });
+        const logs = await Log.find({ userId: req.user.id, bookId }).sort({ createdAt: -1 }); res.status(200).json({ success: true, logs });
     }
     catch (err) {
         console.log(err);
@@ -50,12 +51,12 @@ export async function GetBookLogs(req, res) {
 //Enforces a one-review-per-book policy for each user.
 export async function ReviewCreate(req, res) {
     try {
-        const payload = { ...req.body, userID: req.user.id };
+        const payload = { ...req.body, userId: req.user.id };
         const data = CreateReviews.parse(payload);
 
         const existingReview = await Review.findOne({
-            userID: data.userID,
-            bookID: data.bookID
+            userId: data.userId,
+            bookId: data.bookId
         });
 
         if (existingReview) {
@@ -66,8 +67,8 @@ export async function ReviewCreate(req, res) {
         }
 
         const review = await Review.create({
-            userID: data.userID,
-            bookID: data.bookID,
+            userId: data.userId,
+            bookId: data.bookId,
             rating: data.rating,
             text: data.text
         });
@@ -87,12 +88,12 @@ export async function ReviewCreate(req, res) {
 
 //Retrieves all reviews for a specific book.
 //Populates reviewer details (name, username) and sorts by newest.
- 
+
 export async function GetBookReviews(req, res) {
     try {
-        const { bookID } = req.params;
-        const reviews = await Review.find({ bookID })
-            .populate('userID', 'name username') // Joins User data
+        const { bookId } = req.params;
+        const reviews = await Review.find({ bookId })
+            .populate('userId', 'name username') // Joins User data
             .sort({ createdAt: -1 });
         res.status(200).json({ success: true, reviews });
     }
@@ -103,23 +104,23 @@ export async function GetBookReviews(req, res) {
 }
 
 export async function getMyReview(req, res) {
-  try {
-    const { bookId } = req.params;
-        const review = await Review.findOne({ 
-      bookID: bookId, 
-      userID: req.user.id 
-    });
+    try {
+        const { bookId } = req.params;
+        const review = await Review.findOne({
+            bookId: bookId,
+            userId: req.user.id
+        });
 
-    res.status(200).json({ success: true, review: review || null });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ success: false, error: "Server error" });
-  }
+        res.status(200).json({ success: true, review: review || null });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ success: false, error: "Server error" });
+    }
 }
 
 
- //Updates an existing reading log.
- //Ensures the log exists and belongs to the requesting user.
+//Updates an existing reading log.
+//Ensures the log exists and belongs to the requesting user.
 export async function updateLog(req, res) {
     try {
         const { logId } = req.params;
@@ -137,8 +138,8 @@ export async function updateLog(req, res) {
 }
 
 
- //Updates an existing book review.
- //Restricts updates to the original reviewer.
+//Updates an existing book review.
+//Restricts updates to the original reviewer.
 export async function updateReview(req, res) {
     try {
         const { reviewId } = req.params;
@@ -152,4 +153,54 @@ export async function updateReview(req, res) {
     } catch (err) {
         res.status(500).json({ success: false, error: "Server error" });
     }
+}
+
+
+export async function getMyProgress(req, res) {
+  try {
+    const { bookId } = req.params;
+
+    // 1) bring total pages from Book
+    const book = await Book.findById(bookId).select("length").lean();
+    if (!book) {
+      return res.status(404).json({ success: false, error: "Book not found" });
+    }
+
+    const totalPages = Number(book.length) || 0;
+    if (totalPages <= 0) {
+      return res.status(200).json({
+        success: true,
+        totalPages,
+        currentPage: 0,
+        progressPercent: 0,
+        lastUpdatedAt: null,
+      });
+    }
+
+    // 2) latest log for this user+book
+    const latestLog = await Log.findOne({
+      userId: req.user.id,
+      bookId: bookId,
+    })
+      .sort({ createdAt: -1 })
+      .select("currentPage createdAt")
+      .lean();
+
+    const currentPageRaw = Number(latestLog?.currentPage) || 0;
+    const currentPage = Math.max(0, Math.min(currentPageRaw, totalPages));
+
+    // 3) calculate percent
+    const progressPercent = Math.round((currentPage / totalPages) * 100);
+
+    return res.status(200).json({
+      success: true,
+      totalPages,
+      currentPage,
+      progressPercent,
+      lastUpdatedAt: latestLog?.createdAt || null,
+    });
+  } catch (err) {
+    console.error("getMyProgress error:", err);
+    return res.status(500).json({ success: false, error: "Server error" });
+  }
 }
