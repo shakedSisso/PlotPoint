@@ -1,0 +1,85 @@
+.log-container {
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 40px 20px;
+    min-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.log-header {
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.log-header h2 {
+    color: var(--charcoal);
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+.log-header p {
+    color: #666;
+}
+
+.log-form-card {
+    padding: 40px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    border: 1px solid rgba(0,0,0,0.05);
+}
+
+.form-group {
+    margin-bottom: 25px;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: 600;
+    color: var(--charcoal);
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.form-input, .form-textarea {
+    width: 100%;
+    padding: 15px;
+    border: 2px solid #eee;
+    border-radius: 8px;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    box-sizing: border-box;
+}
+
+.form-input:focus, .form-textarea:focus {
+    border-color: var(--terracotta);
+    box-shadow: 0 0 0 3px rgba(226, 115, 91, 0.1);
+}
+
+.form-textarea {
+    min-height: 150px;
+    resize: vertical;
+}
+
+.button-group {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    margin-top: 30px;
+}
+
+.btn-submit {
+    flex: 2;
+    padding: 15px;
+}
+
+.btn-cancel {
+    flex: 1;
+    padding: 15px;
+    text-align: center;
+}
