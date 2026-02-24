@@ -197,7 +197,7 @@ const BookDetail = () => {
         {buddyRead ? (
           <button className="btn-buddy" onClick={() => navigate(`//buddy-read/${buddyRead._id}`)}>Go to buddyRead</button>
         ) : (
-          <button className="btn-buddy outline" onClick={handleCreateBuddyRead} disabled={!currentPrimaryEntry}>Create a buddyRead</button>
+          <button className="btn-buddy outline" onClick={handleCreateBuddyRead} >Create a buddyRead</button>
         )}
       </div>
 
