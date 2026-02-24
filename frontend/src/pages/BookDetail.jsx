@@ -141,8 +141,12 @@ const BookDetail = () => {
 
   return (
     <div className="book-detail-container">
-      <Link to="/" className="back-link">← Back</Link>
-
+      <button
+        className="back-link"
+        onClick={() => navigate(-1)}
+      >
+        ← Back
+      </button>
       <div className="book-upper-layout">
         <div className="book-cover-wrapper">
           <img src={book.coverImage} alt={book.name} className="book-cover-large" />
