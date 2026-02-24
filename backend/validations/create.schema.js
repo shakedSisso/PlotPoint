@@ -42,14 +42,7 @@ export const CreateBuddyRead = z.object({
     bookInShelf: z.string().min(1, "Select book in shelf"),
     startDate: z.string().or(z.date()),
     endDate: z.string().or(z.date()).optional().nullable()
-}).refine(
-    (data) => new Date(data.endDate) > new Date(data.startDate),
-    {
-        message: "End date must be after start date",
-        path: ["endDate"],
-    }
-);
-
+});
 
 export const CreateLogs = z.object({
     userID: z.string().min(1),
