@@ -57,7 +57,6 @@ export async function shareBuddyRead(req, res) {
             const errors = JSON.parse(err.message).map(e => e.message);
             return res.status(400).json({ success: false, errors });
         }
-        console.log(err);
         return res.status(500).json({ success: false, error: "Server error" });
     }
 }
@@ -99,6 +98,23 @@ export async function getMyBuddyReads(req, res) {
         res.status(500).json({ success: false, error: "Server error" });
     }
 }
+
+export const checkBuddyRead = async (req, res) => {
+    try {
+        const { bookInShelfId } = req.params;
+
+        const buddyRead = await BuddyRead.findOne({ 
+            bookInShelf: bookInShelfId 
+        });
+
+        res.status(200).json({ 
+            success: true, 
+            buddyRead
+        });
+    } catch (err) {
+        res.status(500).json({ success: false, error: err.message });
+    }
+};
 
 export async function endBuddyRead(req, res) {
     try {
