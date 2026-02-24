@@ -24,7 +24,6 @@ const BookDetail = () => {
   const primaryNames = ['to-read', 'reading', 'finished'];
 
   useEffect(() => {
-    // Reset book-specific states on ID change
     setLoading(true);
     setBuddyRead(null);
     setMyEntries([]);
@@ -76,7 +75,7 @@ const BookDetail = () => {
       }
 
     } catch (err) {
-      console.error("Critical fetch error", err);
+      console.error("Fetch error", err);
     } finally {
       setLoading(false);
     }
@@ -99,6 +98,20 @@ const BookDetail = () => {
       }
     } catch (err) {
       console.error("Creation error", err);
+    }
+  };
+
+  const handleCustomToggle = async (shelfId) => {
+    try {
+      const isAlreadyOnShelf = myEntries.some(e => (e.shelfId?._id || e.shelfId) === shelfId);
+      if (isAlreadyOnShelf) {
+        await api.delete(`/shelf/${shelfId}/books/${bookId}`);
+      } else {
+        await api.post('/shelf/add', { bookID: bookId, shelfID: shelfId });
+      }
+      await fetchDetails();
+    } catch (err) {
+      console.error("Custom shelf update error", err.response?.data || err);
     }
   };
 
@@ -127,7 +140,7 @@ const BookDetail = () => {
       setShowReviewModal(false);
       await fetchDetails();
     } catch (err) {
-      console.error(err);
+      console.error("Failed to save review", err);
     }
   };
 
@@ -138,6 +151,8 @@ const BookDetail = () => {
   const statusName = currentPrimaryEntry?.shelfId?.name?.toLowerCase();
   const progressPercent = (book.length > 0 && currentPrimaryEntry?.progress)
     ? Math.round((currentPrimaryEntry.progress / book.length) * 100) : 0;
+
+  const customShelves = userShelves.filter(s => !primaryNames.includes(s.name.toLowerCase()));
 
   return (
     <div className="book-detail-container">
@@ -190,6 +205,26 @@ const BookDetail = () => {
               </div>
             )}
           </div>
+
+          <div className="custom-shelves-section">
+            <button className="custom-toggle-btn" onClick={() => setShowCustom(!showCustom)}>
+              {showCustom ? '− Hide Custom Shelves' : '+ Add to Custom Shelf'}
+            </button>
+            {showCustom && (
+              <div className="custom-shelves-grid">
+                {customShelves.map(shelf => (
+                  <label key={shelf._id} className="shelf-checkbox">
+                    <input 
+                      type="checkbox" 
+                      checked={myEntries.some(e => (e.shelfId?._id || e.shelfId) === shelf._id)}
+                      onChange={() => handleCustomToggle(shelf._id)}
+                    />
+                    <span>{shelf.name}</span>
+                  </label>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
@@ -215,7 +250,12 @@ const BookDetail = () => {
         <div className="tab-content">
           {activeTab === 'logs' ? (
             <div className="logs-list">
-              {logs.map(log => <div key={log._id} className="log-item"><span className="log-date">{new Date(log.createdAt).toLocaleDateString()}</span><p>{log.note || `Progress: ${log.progress} pages`}</p></div>)}
+              {logs.map(log => (
+                <div key={log._id} className="log-item">
+                  <span className="log-date">{new Date(log.createdAt).toLocaleDateString()}</span>
+                  <p>{log.note || `Progress: ${log.progress} pages`}</p>
+                </div>
+              ))}
             </div>
           ) : (
             <div className="reviews-list">
@@ -239,11 +279,25 @@ const BookDetail = () => {
         <div className="modal-overlay">
           <div className="review-modal">
             <h2>Review {book.name}</h2>
-            <div className="rating-input">{[1, 2, 3, 4, 5].map(n => <span key={n} className={rating >= n ? 'star filled' : 'star'} onClick={() => setRating(n)}>★</span>)}</div>
-            <textarea value={reviewText} onChange={(e) => setReviewText(e.target.value)} />
+            <div className="rating-input">
+              {[1, 2, 3, 4, 5].map(num => (
+                <span 
+                  key={num} 
+                  className={rating >= num ? 'star filled' : 'star'} 
+                  onClick={() => setRating(num)}
+                >
+                  ★
+                </span>
+              ))}
+            </div>
+            <textarea 
+              placeholder="What did you think of this book?"
+              value={reviewText} 
+              onChange={(e) => setReviewText(e.target.value)} 
+            />
             <div className="modal-actions">
-              <button onClick={() => setShowReviewModal(false)}>Cancel</button>
-              <button onClick={handleSubmitReview}>Save</button>
+              <button className="btn-secondary" onClick={() => setShowReviewModal(false)}>Cancel</button>
+              <button className="btn-cta" onClick={handleSubmitReview}>Save Review</button>
             </div>
           </div>
         </div>

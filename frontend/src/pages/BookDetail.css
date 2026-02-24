@@ -111,7 +111,6 @@
   cursor: pointer;
 }
 
-/* Modal Styling */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -165,7 +164,6 @@
   gap: 10px;
 }
 
-/* Custom Shelves */
 .add-custom-trigger {
   background: none;
   border: none;
@@ -184,7 +182,6 @@
   border-radius: 8px;
 }
 
-/* Section Divider */
 .section-divider {
   border: 0;
   height: 1px;
@@ -193,7 +190,6 @@
   opacity: 0.5;
 }
 
-/* Tab Header Navigation */
 .tabs-header {
   display: flex;
   gap: 2.5rem;
@@ -231,7 +227,6 @@
   background: var(--terracotta);
 }
 
-/* Tab Content Lists */
 .empty-msg {
   color: #999;
   font-style: italic;
@@ -239,7 +234,6 @@
   padding: 2rem 0;
 }
 
-/* My Logs Styling */
 .log-item {
   background: white;
   padding: 1.2rem;
@@ -349,13 +343,55 @@
 
 .back-link {
   background: transparent;
-  /* רקע שקוף */
   border: none;
-  /* בלי border בכלל */
   outline: none;
-  /* בלי outline כחול */
   color: var(--coffee);
   cursor: pointer;
   font-size: 1rem;
   padding: 0;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.custom-shelves-section {
+  margin-top: 1.5rem;
+}
+
+.custom-toggle-btn {
+  background: none;
+  border: none;
+  color: var(--terracotta);
+  font-weight: 700;
+  cursor: pointer;
+  font-size: 0.95rem;
+  padding: 0;
+  text-decoration: none;
+}
+
+.custom-toggle-btn:hover {
+  text-decoration: none;
+}
+
+.custom-shelves-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  background: var(--cream);
+  padding: 15px;
+  border-radius: 8px;
+  margin-top: 10px;
+  border: 1px solid var(--sand);
+}
+
+.shelf-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  color: var(--coffee);
+}
+
+.shelf-checkbox input {
+  cursor: pointer;
+  margin: 0;
 }
