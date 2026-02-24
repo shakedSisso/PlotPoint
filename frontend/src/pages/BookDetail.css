@@ -268,12 +268,11 @@
   color: var(--coffee);
 }
 
-/* User Reviews Styling */
 .review-card {
   background: var(--cream);
-  padding: 1.8rem;
-  border-radius: 15px;
-  margin-bottom: 1.5rem;
+  padding: 1.5rem;
+  border-radius: 12px;
+  margin-bottom: 1.2rem;
   border: 1px solid rgba(0,0,0,0.05);
 }
 
@@ -281,7 +280,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1rem;
+  margin-bottom: 0.8rem;
 }
 
 .review-user-info strong {
@@ -289,16 +288,17 @@
   color: var(--coffee);
 }
 
-.review-stars {
+.stars {
   color: #f1c40f;
   font-size: 1.2rem;
   letter-spacing: 2px;
 }
 
 .review-body {
-  line-height: 1.7;
+  line-height: 1.6;
   color: #444;
   margin: 0;
+  white-space: pre-wrap;
 }
 
 .buddy-read-banner {

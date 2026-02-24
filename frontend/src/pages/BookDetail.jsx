@@ -215,7 +215,17 @@ const BookDetail = () => {
             </div>
           ) : (
             <div className="reviews-list">
-              {allReviews.map(rev => <div key={rev._id} className="review-card"><strong>{rev.userID?.name}</strong><span className="stars">{'★'.repeat(rev.rating)}</span><p>{rev.text}</p></div>)}
+              {allReviews.map(rev => (
+                <div key={rev._id} className="review-card">
+                  <div className="review-user-info">
+                    <strong>{rev.userID?.name || 'Anonymous'}</strong>
+                    <span className="stars">
+                      {'★'.repeat(rev.rating)}{'☆'.repeat(5 - rev.rating)}
+                    </span>
+                  </div>
+                  <p className="review-body">{rev.text}</p>
+                </div>
+              ))}
             </div>
           )}
         </div>
