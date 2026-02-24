@@ -201,7 +201,7 @@ const BookDetail = () => {
         {buddyRead ? (
           <button className="btn-buddy" onClick={() => navigate(`//buddy-read/${buddyRead._id}`)}>Go to buddyRead</button>
         ) : (
-          <button className="btn-buddy outline" onClick={handleCreateBuddyRead} disabled={!currentPrimaryEntry}>Create a buddyRead</button>
+          <button className="btn-buddy outline" onClick={handleCreateBuddyRead} >Create a buddyRead</button>
         )}
       </div>
 
@@ -219,7 +219,17 @@ const BookDetail = () => {
             </div>
           ) : (
             <div className="reviews-list">
-              {allReviews.map(rev => <div key={rev._id} className="review-card"><strong>{rev.userID?.name}</strong><span className="stars">{'★'.repeat(rev.rating)}</span><p>{rev.text}</p></div>)}
+              {allReviews.map(rev => (
+                <div key={rev._id} className="review-card">
+                  <div className="review-user-info">
+                    <strong>{rev.userID?.name || 'Anonymous'}</strong>
+                    <span className="stars">
+                      {'★'.repeat(rev.rating)}{'☆'.repeat(5 - rev.rating)}
+                    </span>
+                  </div>
+                  <p className="review-body">{rev.text}</p>
+                </div>
+              ))}
             </div>
           )}
         </div>
